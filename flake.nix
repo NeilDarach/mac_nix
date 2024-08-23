@@ -11,6 +11,17 @@
 
   outputs = inputs@{nixpkgs,home-manager,darwin, nixNvim, ...}: 
     let 
+      darwin = 
+        let 
+          src = nixpkgs.legacyPackages."aarch64-darwin".applyPatches {
+            name = "nix-darwin";
+            src = inputs.darwin;
+            patches = [
+              ./dock.nix.patch
+              ];
+            };
+        in
+          nixpkgs.lib.fix (self: (import "${src}/flake.nix").outputs { inherit self nixpkgs; });
       system = "aarch64-darwin";
     in
     {
