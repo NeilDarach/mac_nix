@@ -6,7 +6,7 @@
   # darwin preferences and config
   environment.etc = {
     "sudoers.d/10-nix-commands".text = ''
-      neildarach ALL=(root) NOPASSWD:SETENV: /run/current-system/sw/bin/darwin-rebuild
+      neil ALL=(root) NOPASSWD:SETENV: /run/current-system/sw/bin/darwin-rebuild
       '';
     };
   nix.extraOptions = ''
