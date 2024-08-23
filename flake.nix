@@ -17,7 +17,7 @@
             name = "nix-darwin";
             src = inputs.darwin;
             patches = [
-              ./dock.nix.patch
+              ./patches/dock.nix.patch
               ];
             };
         in

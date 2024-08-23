@@ -23,7 +23,9 @@
     '';
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.loginShell = pkgs.fish;
-  environment.systemPackages = with pkgs; [ plistwatch jq coreutils perl python3 ruby gcc inputs.nixNvim.packages.${pkgs.system}.nvim ];
+  environment.systemPackages = with pkgs; [ plistwatch jq coreutils perl python3 ruby gcc
+ inputs.nixNvim.packages.${pkgs.system}.nvim
+];
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [ (pkgs.nerdfonts.override { fonts = [ "SourceCodePro" "Meslo" ]; }) ];
   services.nix-daemon.enable = true;
