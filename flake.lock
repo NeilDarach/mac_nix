@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1723859949,
-        "narHash": "sha256-kiaGz4deGYKMjJPOji/JVvSP/eTefrIA3rAjOnOpXl4=",
+        "lastModified": 1724299755,
+        "narHash": "sha256-P5zMA17kD9tqiqMuNXwupkM7buM3gMNtoZ1VuJTRDE4=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "076b9a905af8a52b866c8db068d6da475839d97b",
+        "rev": "a8968d88e5a537b0491f68ce910749cd870bdbef",
         "type": "github"
       },
       "original": {
@@ -42,10 +42,8 @@
       }
     },
     "nixCats": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
       "locked": {
+        "dir": "nix",
         "lastModified": 1724151203,
         "narHash": "sha256-3vN0fIdCRC9i8uQpkaHe/BHGgIsC74OVlWt1FvnqOCA=",
         "owner": "BirdeeHub",
@@ -54,8 +52,28 @@
         "type": "github"
       },
       "original": {
+        "dir": "nix",
         "owner": "BirdeeHub",
         "repo": "nixCats-nvim",
+        "type": "github"
+      }
+    },
+    "nixNvim": {
+      "inputs": {
+        "nixCats": "nixCats",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1724307531,
+        "narHash": "sha256-oJ7IJVaQnftl9UUrczEhN8D//fBjUXCRBfM5ItnJfSQ=",
+        "owner": "NeilDarach",
+        "repo": "nixNvim",
+        "rev": "ac1a23c80ddc66e72432078653e6d5bc34b4b176",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NeilDarach",
+        "repo": "nixNvim",
         "type": "github"
       }
     },
@@ -77,11 +95,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1724047581,
-        "narHash": "sha256-BypLrnMS2QvvdVhwWixppTOM3fLPC8eyJse0BNSbbfI=",
+        "lastModified": 1724271409,
+        "narHash": "sha256-z4nw9HxkaXEn+5OT8ljLVL2oataHvAzUQ1LEi8Fp+SY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e9b5094b8f6e06a46f9f53bb97a9573b7cedf2a2",
+        "rev": "36a9aeaaa17a2d4348498275f9fe530cd4f9e519",
         "type": "github"
       },
       "original": {
@@ -95,7 +113,7 @@
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
-        "nixCats": "nixCats",
+        "nixNvim": "nixNvim",
         "nixpkgs": "nixpkgs_2"
       }
     }

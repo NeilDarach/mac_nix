@@ -6,10 +6,10 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    nixNvim.url = "github:NeilDarach/nixNvim";
   };
 
-  outputs = inputs@{nixpkgs,home-manager,darwin, nixCats, ...}: 
+  outputs = inputs@{nixpkgs,home-manager,darwin, nixNvim, ...}: 
     let 
       system = "aarch64-darwin";
     in

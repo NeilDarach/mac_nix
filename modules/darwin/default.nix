@@ -1,12 +1,14 @@
 { inputs,pkgs, ...}: 
-let
-  nixCats = builtins.getFlake github:NeilDarach/nixNvim?rev=ac75b1c0d405e61e9cb8e1b7b2a5be003c542f53;
-in
 {
   imports = [
-    nixCats.nixosModules.default
+    inputs.nixNvim.nixosModules.default
   ];
   # darwin preferences and config
+  environment.etc = {
+    "sudoers.d/10-nix-commands".text = ''
+      neildarach ALL=(root) NOPASSWD:SETENV: /run/current-system/sw/bin/darwin-rebuild
+      '';
+    };
   nix.extraOptions = ''
     experimental-features = nix-command flakes
     '';
@@ -21,13 +23,24 @@ in
     '';
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.loginShell = pkgs.fish;
-  environment.systemPackages = [ pkgs.coreutils nixCats.packages.${pkgs.system}.nvim ];
+  environment.systemPackages = with pkgs; [ coreutils perl python3 ruby gcc inputs.nixNvim.packages.${pkgs.system}.nvim ];
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [ (pkgs.nerdfonts.override { fonts = [ "SourceCodePro" "Meslo" ]; }) ];
   services.nix-daemon.enable = true;
  # system.activationScripts.setLoginShell.text = ''
  #   sudo /usr/bin/chsh -s /run/current-system/sw/bin/fish neil
  #   '';
+  system.activationScripts.postUserActivation.text = ''
+    plutil -replace AllSpacesAndDisplays.Desktop.Content.Choices.0.Files.0.relative -string "file:///System/Library/ExtensionKit/Extensions/Wallpaper.appex/Contents/Resources/Transparent.tiff" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+    plutil -replace SystemDefault.Desktop.Content.Choices.0.Files.0.relative -string "file:///System/Library/ExtensionKit/Extensions/Wallpaper.appex/Contents/Resources/Transparent.tiff" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+    plutil -replace AllSpacesAndDisplays.Desktop.Content.Choices.0.Configuration -data "YnBsaXN0MDDSAQIDDF8QD2JhY2tncm91bmRDb2xvcllwbGFjZW1lbnTSBAUGC1pjb21wb25lbnRzWmNvbG9yU3BhY2WkBwgJCiM/00x2AAAAACM/51NnoAAAACM/7/YZ4AAAACM/8AAAAAAAAE8QQ2JwbGlzdDAwXxAXa0NHQ29sb3JTcGFjZUdlbmVyaWNSR0IIAAAAAAAAAQEAAAAAAAAAAQAAAAAAAAAAAAAAAAAAACIQAQgNHykuOURJUltkbbMAAAAAAAABAQAAAAAAAAANAAAAAAAAAAAAAAAAAAAAtQ==" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+    plutil -replace SystemDefault.Desktop.Content.Choices.0.Configuration -data "YnBsaXN0MDDSAQIDDF8QD2JhY2tncm91bmRDb2xvcllwbGFjZW1lbnTSBAUGC1pjb21wb25lbnRzWmNvbG9yU3BhY2WkBwgJCiM/00x2AAAAACM/51NnoAAAACM/7/YZ4AAAACM/8AAAAAAAAE8QQ2JwbGlzdDAwXxAXa0NHQ29sb3JTcGFjZUdlbmVyaWNSR0IIAAAAAAAAAQEAAAAAAAAAAQAAAAAAAAAAAAAAAAAAACIQAQgNHykuOURJUltkbbMAAAAAAAABAQAAAAAAAAANAAAAAAAAAAAAAAAAAAAAtQ==" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+    plutil -replace AllSpacesAndDisplays.Desktop.LastSet -date "$(date -u +"%Y-%m-%dT%TZ")" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+    plutil -replace SystemDefault.Desktop.LastSet -date "$(date -u +"%Y-%m-%dT%TZ")" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
+    killall WallpaperAgent
+    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+    '';
+
   system.defaults = {
     finder._FXShowPosixPathInTitle = true;
     NSGlobalDomain.InitialKeyRepeat = 14;
@@ -36,6 +49,7 @@ in
     dock.persistent-apps = [ 
       "/Applications/Safari.app" 
       "${pkgs.alacritty}/Applications/Alacritty.app"
+      "${pkgs.neovide}/Applications/Neovide.app"
       ];
     };
   }
