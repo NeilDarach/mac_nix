@@ -36,7 +36,15 @@
                    bat.config.theme = "TwoDark";
                    fzf.enable = true;
                    fzf.enableZshIntegration = true;
-                   git.enable = true;
+                   git = {
+                     enable = true;
+                     ignores = [
+                                 "*~"
+                                 "*.swp"
+                                 ];
+                     userEmail = "neil.darach@gmail.com";
+                     userName = "Neil Darach";
+                     };
                    zsh.enable = true;
                    zsh.enableCompletion = true;
                    zsh.autosuggestion.enable = true;
