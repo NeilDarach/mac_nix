@@ -1,4 +1,5 @@
 {
+# comment
   description = "Minimal Mac flake";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -39,16 +40,22 @@
           ./modules/darwin 
 
           home-manager.darwinModules.home-manager {
-            users.knownUsers = [ "neil" ];
-            users.users.neil.home = "/Users/neil";
-            users.users.neil.uid = 501;
-            users.users.neil.shell = "/run/current-system/sw/bin/fish";
+            users = {
+	      knownUsers = [ "neil" ];
+              users = {
+	        neil = {
+		  home = "/Users/neil";
+                  uid = 501;
+                  shell = "/run/current-system/sw/bin/fish";
+		  };
+		};
+	      };
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = { inherit inputs; };
               users.neil.imports = [
-                ./modules/home-manager 
+                ./modules/home-manager
                 ];
               }; 
             }
