@@ -1,4 +1,7 @@
 { inputs,pkgs, ...}: 
+let
+  wallpaper = ./wallpaper.plist;
+in
 {
   imports = [
     inputs.nixNvim.nixosModules.default
@@ -33,13 +36,7 @@
  #   sudo /usr/bin/chsh -s /run/current-system/sw/bin/fish neil
  #   '';
   system.activationScripts.postUserActivation.text = ''
-    plutil -replace AllSpacesAndDisplays.Desktop.Content.Choices.0.Files.0.relative -string "file:///System/Library/ExtensionKit/Extensions/Wallpaper.appex/Contents/Resources/Transparent.tiff" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-    plutil -replace SystemDefault.Desktop.Content.Choices.0.Files.0.relative -string "file:///System/Library/ExtensionKit/Extensions/Wallpaper.appex/Contents/Resources/Transparent.tiff" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-    plutil -replace AllSpacesAndDisplays.Desktop.Content.Choices.0.Configuration -data "YnBsaXN0MDDSAQIDDF8QD2JhY2tncm91bmRDb2xvcllwbGFjZW1lbnTSBAUGC1pjb21wb25lbnRzWmNvbG9yU3BhY2WkBwgJCiM/00x2AAAAACM/51NnoAAAACM/7/YZ4AAAACM/8AAAAAAAAE8QQ2JwbGlzdDAwXxAXa0NHQ29sb3JTcGFjZUdlbmVyaWNSR0IIAAAAAAAAAQEAAAAAAAAAAQAAAAAAAAAAAAAAAAAAACIQAQgNHykuOURJUltkbbMAAAAAAAABAQAAAAAAAAANAAAAAAAAAAAAAAAAAAAAtQ==" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-    plutil -replace SystemDefault.Desktop.Content.Choices.0.Configuration -data "YnBsaXN0MDDSAQIDDF8QD2JhY2tncm91bmRDb2xvcllwbGFjZW1lbnTSBAUGC1pjb21wb25lbnRzWmNvbG9yU3BhY2WkBwgJCiM/00x2AAAAACM/51NnoAAAACM/7/YZ4AAAACM/8AAAAAAAAE8QQ2JwbGlzdDAwXxAXa0NHQ29sb3JTcGFjZUdlbmVyaWNSR0IIAAAAAAAAAQEAAAAAAAAAAQAAAAAAAAAAAAAAAAAAACIQAQgNHykuOURJUltkbbMAAAAAAAABAQAAAAAAAAANAAAAAAAAAAAAAAAAAAAAtQ==" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-    plutil -replace AllSpacesAndDisplays.Desktop.LastSet -date "$(date -u +"%Y-%m-%dT%TZ")" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-    plutil -replace SystemDefault.Desktop.LastSet -date "$(date -u +"%Y-%m-%dT%TZ")" "/Users/neil/Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-
+    /usr/libexec/PlistBuddy -c "Clear dict" -c "Merge ${wallpaper}" -c Save ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist
     killall WallpaperAgent
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     '';

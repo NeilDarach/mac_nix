@@ -9,7 +9,7 @@
                    };
                  home.shellAliases = {
                    ls = "ls --color=auto -F";
-                   nr = "/run/current-system/sw/bin/darwin-rebuild switch --flake ~/syscfg/.#";
+                   nr = "darwin-rebuild switch --flake ~/mac_nix/.#";
                    };
   programs.fish = {
    enable = true;
