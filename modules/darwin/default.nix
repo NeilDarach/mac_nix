@@ -31,10 +31,14 @@ in {
     ruby
     gcc
     inputs.nixNvim.packages.${pkgs.system}.nvim
+    vlc-bin-universal
   ];
   system.keyboard.enableKeyMapping = true;
-  fonts.packages =
-    [ (pkgs.nerdfonts.override { fonts = [ "SourceCodePro" "Meslo" "NerdFontsSymbolsOnly" ]; }) ];
+  fonts.packages = [
+    (pkgs.nerdfonts.override {
+      fonts = [ "SourceCodePro" "Meslo" "NerdFontsSymbolsOnly" ];
+    })
+  ];
   services.nix-daemon.enable = true;
   # system.activationScripts.setLoginShell.text = ''
   #   sudo /usr/bin/chsh -s /run/current-system/sw/bin/fish neil
@@ -52,6 +56,7 @@ in {
     NSGlobalDomain."com.apple.swipescrolldirection" = false;
     dock = {
       persistent-apps = [
+        "/System/Applications/System Settings.app"
         "/Applications/Safari.app"
         "${pkgs.alacritty}/Applications/Alacritty.app"
         "${pkgs.neovide}/Applications/Neovide.app"
