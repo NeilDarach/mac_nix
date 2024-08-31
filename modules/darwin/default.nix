@@ -14,6 +14,7 @@ in {
   programs.zsh.enable = true;
   programs.fish.enable = true;
   programs.fish.shellInit = ''
+    eval "$(/opt/homebrew/bin/brew shellenv)"
     for p in /run/current-system/sw/bin
       if not contains $p $fish_user_paths
         set -g fish_user_paths $p $fish_user_paths
@@ -33,6 +34,12 @@ in {
     inputs.nixNvim.packages.${pkgs.system}.nvim
     vlc-bin-universal
   ];
+  homebrew = {
+    enable = true;
+    taps = [ ];
+    brews = [ "mas"];
+    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" ];
+  };
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [
     (pkgs.nerdfonts.override {
@@ -61,7 +68,7 @@ in {
         "${pkgs.alacritty}/Applications/Alacritty.app"
         "${pkgs.neovide}/Applications/Neovide.app"
       ];
-      persistent-others = [ "/Users/neil/Downloads" "/Applications" ];
+      persistent-others = [ "/Applications" "/Users/neil/Downloads" ];
       show-recents = false;
       orientation = "left";
     };
