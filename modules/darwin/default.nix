@@ -37,7 +37,7 @@ in {
   homebrew = {
     enable = true;
     taps = [ ];
-    brews = [ "mas"];
+    brews = [ "mas" ];
     casks = [ "1password" "autodesk-fusion" "mqtt-explorer" ];
   };
   system.keyboard.enableKeyMapping = true;
@@ -64,7 +64,8 @@ in {
     dock = {
       persistent-apps = [
         "/System/Applications/System Settings.app"
-        "/Applications/Safari.app"
+        #"/Applications/Safari.app"
+        "/Users/neil/Applications/Home\ Manager\ Apps/Firefox.app"
         "${pkgs.alacritty}/Applications/Alacritty.app"
         "${pkgs.neovide}/Applications/Neovide.app"
       ];

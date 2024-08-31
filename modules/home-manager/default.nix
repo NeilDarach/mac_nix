@@ -58,5 +58,9 @@
       settings.font.normal.family = "SauceCodePro Nerd Font Mono";
       settings.font.size = 16;
     };
+    firefox = {
+            enable = true;
+            package = pkgs.firefox-bin;
+        };
   };
 }
