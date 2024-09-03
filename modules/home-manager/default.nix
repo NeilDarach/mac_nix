@@ -1,4 +1,14 @@
-{ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+let
+  lock-false = {
+    Value = false;
+    Status = "locked";
+  };
+  lock-true = {
+    Value = true;
+    Status = "locked";
+  };
+in {
   # home-manger configs
   home.stateVersion = "22.11";
   home.packages = [ pkgs.ripgrep pkgs.fd pkgs.curl pkgs.less ];
@@ -14,9 +24,7 @@
 
   programs.fish = {
     enable = true;
-    functions = {
-            flake-update ="nix flake lock --update-input $argv[1]";
-        };
+    functions = { flake-update = "nix flake lock --update-input $argv[1]"; };
     loginShellInit = let
       profiles = [
         "/etc/profiles/per-user/$USER"
@@ -59,8 +67,19 @@
       settings.font.size = 16;
     };
     firefox = {
-            enable = true;
-            package = pkgs.firefox-bin;
+      enable = true;
+      package = pkgs.firefox-bin;
+      profiles = {
+        default = {
+          id = 0;
+          name = "default";
+          isDefault = true;
+          settings = {
+            "browser.startup.homepage" = "https://arstechnica.com";
+          };
+          extensions = with pkgs.nur.repos.rycee.firefox-addons; [ darkreader ];
         };
+      };
+    };
   };
 }

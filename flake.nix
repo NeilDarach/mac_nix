@@ -10,6 +10,7 @@
     nixNvim.url = "github:NeilDarach/nixNvim/lze";
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     firefox-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs = inputs@{ nixpkgs, home-manager, darwin, nixNvim, ... }:
@@ -28,7 +29,7 @@
         Neils-Virtual-Machine = darwin.lib.darwinSystem {
           pkgs = import nixpkgs {
             system = "aarch64-darwin";
-            overlays = [ inputs.firefox-darwin.overlay ];
+            overlays = [ inputs.firefox-darwin.overlay inputs.nur.overlay ];
             config = {
               allowUnfree = true;
               allowUnfreePredicate = _: true;
