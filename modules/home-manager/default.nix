@@ -10,6 +10,10 @@ let
   };
 in {
   # home-manger configs
+  home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
+    run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
+    run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
+  '';
   home.stateVersion = "22.11";
   home.packages = [ pkgs.ripgrep pkgs.fd pkgs.curl pkgs.less ];
   home.sessionVariables = {
@@ -69,15 +73,13 @@ in {
     firefox = {
       enable = true;
       package = pkgs.firefox-bin;
-      profiles = {
-        default = {
-          id = 0;
-          name = "default";
-          isDefault = true;
-          settings = {
-            "browser.startup.homepage" = "https://arstechnica.com";
-          };
-          extensions = with pkgs.nur.repos.rycee.firefox-addons; [ darkreader ];
+      profiles.neil = {
+        extensions = with pkgs.nur.repos.rycee.firefox-addons;
+          [ ublock-origin ];
+        settings = {
+          "browser.startup.homepage" = "about:about";
+          "browser.shell.checkDefaultBrowser" = "false";
+          "browser.shell.defaultBrowserCheckCount" = 1;
         };
       };
     };
