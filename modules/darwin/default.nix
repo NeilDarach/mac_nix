@@ -65,11 +65,27 @@ in {
       persistent-apps = [
         "/System/Applications/System Settings.app"
         #"/Applications/Safari.app"
-        "/Users/neil/Applications/Home\ Manager\ Apps/Firefox.app"
+        "/Users/neil/Applications/Home Manager Apps/Firefox.app"
         "${pkgs.alacritty}/Applications/Alacritty.app"
         "${pkgs.neovide}/Applications/Neovide.app"
       ];
-      persistent-others = [ "/Applications" "/Users/neil/Downloads" ];
+      persistent-others = [
+        {
+          tile-data = {
+            file-data = { _CFURLString = "file:///Applications"; };
+            displayas = 1;
+          };
+          tile-type = "directory-tile";
+        }
+                {
+          tile-data = {
+            file-data = { _CFURLString = "file:///Users/neil/Downloads"; };
+            displayas = 1;
+          };
+          tile-type = "directory-tile";
+        }
+      ];
+      #persistent-others = [ "/Applications" "/Users/neil/Downloads" ];
       show-recents = false;
       orientation = "left";
     };

@@ -13,6 +13,8 @@ in {
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
     run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
+    run rm /Users/neil/Library/Application\ Support/Firefox/profiles.ini.bak
+    run chmod u+w /Users/neil/Library/Application\ Support/Firefox/profiles.ini
   '';
   home.stateVersion = "22.11";
   home.packages = [ pkgs.ripgrep pkgs.fd pkgs.curl pkgs.less ];
@@ -75,11 +77,12 @@ in {
       package = pkgs.firefox-bin;
       profiles.neil = {
         extensions = with pkgs.nur.repos.rycee.firefox-addons;
-          [ ublock-origin ];
+          [ ublock-origin onepassword-password-manager ];
         settings = {
-          "browser.startup.homepage" = "about:about";
-          "browser.shell.checkDefaultBrowser" = "false";
+          "browser.startup.homepage" = "https://theoldreader.com/posts/all";
+          "browser.shell.checkDefaultBrowser" = false;
           "browser.shell.defaultBrowserCheckCount" = 1;
+          "browser.shell.skipDefaultBrowserCheck" = true;
         };
       };
     };

@@ -1,11 +1,91 @@
---- a/modules/system/defaults/dock.nix	2024-08-23 16:38:34
-+++ b/modules/system/defaults/dock.nix	2024-08-23 16:41:48
-@@ -146,7 +146,7 @@
+diff --color=auto -Naur a/modules/system/defaults/dock.nix b/modules/system/defaults/dock.nix
+--- a/modules/system/defaults/dock.nix	2024-09-04 19:37:51
++++ b/modules/system/defaults/dock.nix	2024-09-04 20:23:04
+@@ -126,27 +126,63 @@
+     system.defaults.dock.persistent-apps = mkOption {
+       type = types.nullOr (types.listOf (types.either types.path types.str));
+       default = null;
+-      example = [ "/Applications/Safari.app" "/System/Applications/Utilities/Terminal.app" ];
++      example = [
++        "/Applications/Safari.app"
++        "/System/Applications/Utilities/Terminal.app"
++      ];
+       description = ''
+         Persistent applications in the dock.
+       '';
        apply = value:
-         if !(isList value)
-         then value
+-        if !(isList value)
+-        then value
+-        else map (app: { tile-data = { file-data = { _CFURLString = app; _CFURLStringType = 0; }; }; }) value;
++        if !(isList value) then
++          value
++        else
++          map (app: {
++            tile-data = {
++              file-data = {
++                _CFURLString = app;
++                _CFURLStringType = 0;
++              };
++            };
++          }) value;
+     };
+ 
+     system.defaults.dock.persistent-others = mkOption {
+-      type = types.nullOr (types.listOf (types.either types.path types.str));
++      type = types.nullOr (types.listOf
++        (types.either types.attrs (types.either types.str types.attrs)));
+       default = null;
+       example = [ "~/Documents" "~/Downloads" ];
+       description = ''
+         Persistent folders in the dock.
+       '';
+       apply = value:
+-        if !(isList value)
+-        then value
 -        else map (folder: { tile-data = { file-data = { _CFURLString = "file://" + folder; _CFURLStringType = 15; }; }; tile-type = if strings.hasInfix "." (last (splitString "/" folder)) then "file-tile" else "directory-tile"; }) value;
-+        else map (folder: { tile-data = { file-data = { _CFURLString = "file://" + folder; _CFURLStringType = 15; }; displayas = 1; }; tile-type = if strings.hasInfix "." (last (splitString "/" folder)) then "file-tile" else "directory-tile"; }) value;
++        if !(isList value) then
++          value
++        else
++          map (arg:
++            if (isAttrs arg) then
++              lib.attrsets.recursiveUpdate {
++                tile-data = {
++                  file-data = {
++                    _CFURLString = "file://";
++                    _CFURLStringType = 15;
++                  };
++                };
++                tile-type = "file-tile";
++              } arg
++            else {
++              tile-data = {
++                file-data = {
++                  _CFURLString = "file://" + arg;
++                  _CFURLStringType = 15;
++                };
++              };
++              tile-type =
++                if strings.hasInfix "." (last (splitString "/" arg)) then
++                  "file-tile"
++                else
++                  "directory-tile";
++            }) value;
      };
  
      system.defaults.dock.show-process-indicators = mkOption {
+@@ -204,7 +240,6 @@
+         Magnified icon size on hover. The default is 16.
+       '';
+     };
+-   
+ 
+     system.defaults.dock.wvous-tl-corner = mkOption {
+       type = types.nullOr types.ints.positive;
+@@ -290,6 +325,6 @@
+       '';
+     };
+ 
+-    };
++  };
+ }
+ 
