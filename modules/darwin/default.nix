@@ -64,25 +64,18 @@ in {
     dock = {
       persistent-apps = [
         "/System/Applications/System Settings.app"
-        #"/Applications/Safari.app"
-        "/Users/neil/Applications/Home Manager Apps/Firefox.app"
+        "${pkgs.firefox-bin}/Applications/Firefox.app"
         "${pkgs.alacritty}/Applications/Alacritty.app"
         "${pkgs.neovide}/Applications/Neovide.app"
       ];
       persistent-others = [
         {
-          tile-data = {
-            file-data = { _CFURLString = "file:///Applications"; };
-            displayas = 1;
-          };
-          tile-type = "directory-tile";
+          name = "/Applications";
+          displayas = 1;
         }
-                {
-          tile-data = {
-            file-data = { _CFURLString = "file:///Users/neil/Downloads"; };
-            displayas = 1;
-          };
-          tile-type = "directory-tile";
+        {
+          name = "/Users/neil/Downloads";
+          displayas = 1;
         }
       ];
       #persistent-others = [ "/Applications" "/Users/neil/Downloads" ];

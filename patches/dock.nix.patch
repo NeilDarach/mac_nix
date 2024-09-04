@@ -1,7 +1,7 @@
 diff --color=auto -Naur a/modules/system/defaults/dock.nix b/modules/system/defaults/dock.nix
 --- a/modules/system/defaults/dock.nix	2024-09-04 19:37:51
-+++ b/modules/system/defaults/dock.nix	2024-09-04 20:23:04
-@@ -126,27 +126,63 @@
++++ b/modules/system/defaults/dock.nix	2024-09-04 22:14:53
+@@ -126,27 +126,62 @@
      system.defaults.dock.persistent-apps = mkOption {
        type = types.nullOr (types.listOf (types.either types.path types.str));
        default = null;
@@ -47,33 +47,32 @@ diff --color=auto -Naur a/modules/system/defaults/dock.nix b/modules/system/defa
 +          value
 +        else
 +          map (arg:
-+            if (isAttrs arg) then
-+              lib.attrsets.recursiveUpdate {
-+                tile-data = {
-+                  file-data = {
-+                    _CFURLString = "file://";
-+                    _CFURLStringType = 15;
-+                  };
-+                };
-+                tile-type = "file-tile";
-+              } arg
-+            else {
-+              tile-data = {
-+                file-data = {
-+                  _CFURLString = "file://" + arg;
-+                  _CFURLStringType = 15;
-+                };
-+              };
-+              tile-type =
-+                if strings.hasInfix "." (last (splitString "/" arg)) then
++            let
++              target = if (isAttrs arg) then arg.name else arg;
++              displayas = if (isAttrs arg) then (arg.displayas or 0) else 0;
++              tile-type = if (isAttrs arg) then
++                arg."tile-type" or default-tile-type
++              else
++                default-tile-type;
++              default-tile-type =
++                if strings.hasInfix "." (last (splitString "/" target)) then
 +                  "file-tile"
 +                else
 +                  "directory-tile";
++            in {
++              tile-data = {
++                displayas = displayas;
++                file-data = {
++                  _CFURLString = "file://" + target;
++                  _CFURLStringType = 15;
++                };
++              };
++              tile-type = tile-type;
 +            }) value;
      };
  
      system.defaults.dock.show-process-indicators = mkOption {
-@@ -204,7 +240,6 @@
+@@ -204,7 +239,6 @@
          Magnified icon size on hover. The default is 16.
        '';
      };
@@ -81,7 +80,7 @@ diff --color=auto -Naur a/modules/system/defaults/dock.nix b/modules/system/defa
  
      system.defaults.dock.wvous-tl-corner = mkOption {
        type = types.nullOr types.ints.positive;
-@@ -290,6 +325,6 @@
+@@ -290,6 +324,6 @@
        '';
      };
  
