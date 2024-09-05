@@ -1,6 +1,6 @@
 diff --color=auto -Naur a/modules/system/defaults/dock.nix b/modules/system/defaults/dock.nix
 --- a/modules/system/defaults/dock.nix	2024-09-04 19:37:51
-+++ b/modules/system/defaults/dock.nix	2024-09-04 22:14:53
++++ b/modules/system/defaults/dock.nix	2024-09-05 21:39:12
 @@ -126,27 +126,62 @@
      system.defaults.dock.persistent-apps = mkOption {
        type = types.nullOr (types.listOf (types.either types.path types.str));
@@ -33,9 +33,10 @@ diff --color=auto -Naur a/modules/system/defaults/dock.nix b/modules/system/defa
      system.defaults.dock.persistent-others = mkOption {
 -      type = types.nullOr (types.listOf (types.either types.path types.str));
 +      type = types.nullOr (types.listOf
-+        (types.either types.attrs (types.either types.str types.attrs)));
++        (types.either types.attrs (types.oneOf [ types.path types.str types.attrs])));
        default = null;
-       example = [ "~/Documents" "~/Downloads" ];
+-      example = [ "~/Documents" "~/Downloads" ];
++      example = [ "~/Documents" "~/Downloads" { "name" = "~/Music"; "displayas" = 1; } ];
        description = ''
          Persistent folders in the dock.
        '';
@@ -43,7 +44,7 @@ diff --color=auto -Naur a/modules/system/defaults/dock.nix b/modules/system/defa
 -        if !(isList value)
 -        then value
 -        else map (folder: { tile-data = { file-data = { _CFURLString = "file://" + folder; _CFURLStringType = 15; }; }; tile-type = if strings.hasInfix "." (last (splitString "/" folder)) then "file-tile" else "directory-tile"; }) value;
-+        if !(isList value) then
++        if !(isList value) then  # it's a null
 +          value
 +        else
 +          map (arg:
