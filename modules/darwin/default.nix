@@ -38,7 +38,7 @@ in {
     enable = true;
     taps = [ ];
     brews = [ "mas" ];
-    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" ];
+    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" "dropbox"];
   };
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [
