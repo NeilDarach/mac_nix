@@ -33,6 +33,7 @@ in {
     gcc
     inputs.nixNvim.packages.${pkgs.system}.nvim
     vlc-bin-universal
+    home-manager
   ];
   homebrew = {
     enable = true;

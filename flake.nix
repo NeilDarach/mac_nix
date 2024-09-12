@@ -24,6 +24,8 @@
       in nixpkgs.lib.fix
       (self: (import "${src}/flake.nix").outputs { inherit self nixpkgs; });
       system = "aarch64-darwin";
+      pkgs = nixpkgs.legacyPackages.${system};
+
     in {
       darwinConfigurations = {
         Neils-Virtual-Machine = darwin.lib.darwinSystem {
@@ -60,6 +62,17 @@
             }
           ];
         };
+      };
+      homeConfigurations."neil" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "aarch64-darwin";
+          overlays = [ inputs.firefox-darwin.overlay inputs.nur.overlay ];
+          config = {
+            allowUnfree = true;
+            allowUnfreePredicate = _: true;
+          };
+        };
+        modules = [ ./modules/home-manager ];
       };
     };
 }

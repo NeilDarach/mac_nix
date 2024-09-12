@@ -1,23 +1,15 @@
-{ pkgs, lib, ... }:
-let
-  lock-false = {
-    Value = false;
-    Status = "locked";
-  };
-  lock-true = {
-    Value = true;
-    Status = "locked";
-  };
-in {
+{ config, pkgs, lib, ... }: {
   # home-manger configs
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
     run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
-    run rm /Users/neil/Library/Application\ Support/Firefox/profiles.ini.bak
+    run rm -f /Users/neil/Library/Application\ Support/Firefox/profiles.ini.bak
     run chmod u+w /Users/neil/Library/Application\ Support/Firefox/profiles.ini
   '';
-  home.stateVersion = "22.11";
+  home.stateVersion = "24.05";
   home.packages = [ pkgs.ripgrep pkgs.fd pkgs.curl pkgs.less ];
+  home.username = "neil";
+  home.homeDirectory = "/Users/neil";
   home.sessionVariables = {
     PAGER = "less";
     CLICOLOR = 1;
@@ -26,8 +18,17 @@ in {
   home.shellAliases = {
     ls = "ls --color=auto -F";
     nr = "darwin-rebuild switch --flake ~/mac_nix/.#";
+    hr = "home-manager switch --flake ~/mac_nix/.#$(whoami)";
+    rg = "batgrep";
+    cat = "bat";
+    less = "bat";
   };
 
+  programs.bat = {
+    enable = true;
+    extraPackages = with pkgs.bat-extras; [ batgrep ];
+    config.theme = "TwoDark";
+  };
   programs.fish = {
     enable = true;
     functions = { flake-update = "nix flake lock --update-input $argv[1]"; };
@@ -47,8 +48,6 @@ in {
     '';
   };
   programs = {
-    bat.enable = true;
-    bat.config.theme = "TwoDark";
     fzf.enable = true;
     fzf.enableZshIntegration = true;
     git = {
@@ -76,8 +75,10 @@ in {
       enable = true;
       package = pkgs.firefox-bin;
       profiles.neil = {
-        extensions = with pkgs.nur.repos.rycee.firefox-addons;
-          [ ublock-origin onepassword-password-manager ];
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          onepassword-password-manager
+        ];
         settings = {
           "browser.startup.homepage" = "https://theoldreader.com/posts/all";
           "browser.shell.checkDefaultBrowser" = false;
