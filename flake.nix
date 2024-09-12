@@ -72,6 +72,7 @@
             allowUnfreePredicate = _: true;
           };
         };
+                extraSpecialArgs = { inherit inputs; };
         modules = [ ./modules/home-manager ];
       };
     };

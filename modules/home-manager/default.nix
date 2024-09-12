@@ -1,13 +1,36 @@
-{ config, pkgs, lib, ... }: {
+{ config, inputs, pkgs, lib, ... }:
+let wallpaper = ./wallpaper.plist;
+
+in {
   # home-manger configs
+    #imports = [ inputs.nixNvim.nixosModules.default ];
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
     run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
     run rm -f /Users/neil/Library/Application\ Support/Firefox/profiles.ini.bak
     run chmod u+w /Users/neil/Library/Application\ Support/Firefox/profiles.ini
   '';
+  home.activation.desktop = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
+    /usr/libexec/PlistBuddy -c "Clear dict" -c "Merge ${wallpaper}" -c Save ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist
+    /usr/bin/killall WallpaperAgent
+    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+  '';
   home.stateVersion = "24.05";
-  home.packages = [ pkgs.ripgrep pkgs.fd pkgs.curl pkgs.less ];
+  home.packages = with pkgs; [
+    ripgrep
+    fd
+    curl
+    less
+    plistwatch
+    jq
+    coreutils
+    perl
+    python3
+    ruby
+    gcc
+    vlc-bin-universal
+    inputs.nixNvim.packages.${pkgs.system}.nvim
+  ];
   home.username = "neil";
   home.homeDirectory = "/Users/neil";
   home.sessionVariables = {
@@ -45,6 +68,12 @@
       fish_add_path --move --prepend --path ${makeBinSearchPath profiles}
       set fish_user_paths $fish_user_paths  
       fish_vi_key_bindings
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+      for p in /run/current-system/sw/bin
+        if not contains $p $fish_user_paths
+          set -g fish_user_paths $p $fish_user_paths
+        end
+      end
     '';
   };
   programs = {
