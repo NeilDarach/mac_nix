@@ -3,7 +3,7 @@ let wallpaper = ./wallpaper.plist;
 
 in {
   # home-manger configs
-    #imports = [ inputs.nixNvim.nixosModules.default ];
+  #imports = [ inputs.nixNvim.nixosModules.default ];
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
     run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
@@ -15,7 +15,6 @@ in {
     /usr/bin/killall WallpaperAgent
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
-  home.stateVersion = "24.05";
   home.packages = with pkgs; [
     ripgrep
     fd
@@ -30,7 +29,9 @@ in {
     gcc
     vlc-bin-universal
     inputs.nixNvim.packages.${pkgs.system}.nvim
+    dockutil
   ];
+  home.stateVersion = "24.05";
   home.username = "neil";
   home.homeDirectory = "/Users/neil";
   home.sessionVariables = {

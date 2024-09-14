@@ -2,7 +2,8 @@
   # comment
   description = "Minimal Mac flake";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
@@ -13,7 +14,8 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, darwin, nixNvim, ... }:
+  outputs =
+    inputs@{ nixpkgs, nixpkgs-unstable, home-manager, darwin, nixNvim, ... }:
     let
       darwin = let
         src = nixpkgs.legacyPackages."aarch64-darwin".applyPatches {
@@ -37,7 +39,13 @@
               allowUnfreePredicate = _: true;
             };
           };
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            inherit inputs;
+            pkgs-unstable = import nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
           modules = [
             ./modules/darwin
             home-manager.darwinModules.home-manager
@@ -72,7 +80,7 @@
             allowUnfreePredicate = _: true;
           };
         };
-                extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs; };
         modules = [ ./modules/home-manager ];
       };
     };

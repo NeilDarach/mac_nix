@@ -1,5 +1,4 @@
-{ inputs, pkgs, ... }:
- {
+{ inputs, pkgs, pkgs-unstable, ... }: {
   # darwin preferences and config
   environment.etc = {
     "sudoers.d/10-nix-commands".text = ''
@@ -13,14 +12,12 @@
   programs.fish.enable = true;
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.loginShell = pkgs.fish;
-  environment.systemPackages = with pkgs; [
-    home-manager
-  ];
+  environment.systemPackages = with pkgs; [ home-manager ];
   homebrew = {
     enable = true;
     taps = [ ];
     brews = [ "mas" ];
-    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" "dropbox"];
+    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" "dropbox" ];
   };
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [
@@ -30,6 +27,7 @@
   ];
   services.nix-daemon.enable = true;
 
+  system.stateVersion = 5;
   system.defaults = {
     finder._FXShowPosixPathInTitle = true;
     NSGlobalDomain.InitialKeyRepeat = 14;
@@ -40,7 +38,7 @@
         "/System/Applications/System Settings.app"
         "${pkgs.firefox-bin}/Applications/Firefox.app"
         "${pkgs.alacritty}/Applications/Alacritty.app"
-        "${pkgs.neovide}/Applications/Neovide.app"
+        "${pkgs-unstable.neovide}/Applications/Neovide.app"
       ];
       persistent-others = [
         {
