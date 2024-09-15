@@ -53,7 +53,7 @@ let
     ${entryURI entry.path}
   '') entries;
   createEntries = lib.concatMapStrings (entry: ''
-    ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --add '${entry.path}' --section '${entry.section}' ${entry.options}
+    ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --add '${entry.path}' --section '${entry.section}' ${entry.options} >/dev/null
   '') entries;
 
 in {
@@ -74,8 +74,8 @@ in {
   home.activation.dock = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     echo >&2 "Setting up the dock..."
     haveURIs="$(${pkgs.dockutil}/bin/dockutil ${plist} --list | ${pkgs.coreutils}/bin/cut -f2)"
-    if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
-      ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --remove all
+    if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >/dev/null; then
+      ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --remove all >/dev/null
       ${createEntries}
       /usr/bin/killall Dock
     fi
