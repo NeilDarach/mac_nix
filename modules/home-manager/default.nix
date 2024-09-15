@@ -1,5 +1,60 @@
-{ config, inputs, pkgs, lib, ... }:
-let wallpaper = ./wallpaper.plist;
+{ config, inputs, pkgs, pkgs-unstable, lib, ... }:
+let
+  wallpaper = ./wallpaper.plist;
+  plist = "/Users/neil/Library/Preferences/com.apple.dock.plist";
+  entries = [
+    {
+      path = "/System/Applications/System Settings.app";
+      section = "apps";
+      options = "";
+    }
+    {
+      path = "${pkgs.firefox-bin}/Applications/Firefox.app";
+      section = "apps";
+      options = "";
+    }
+    {
+      path = "${pkgs.alacritty}/Applications/Alacritty.app";
+      section = "apps";
+      options = "";
+    }
+    {
+      path = "${pkgs-unstable.neovide}/Applications/Neovide.app";
+      section = "apps";
+      options = "";
+    }
+    {
+      path = "/Applications";
+      section = "others";
+      options = "--sort name --view grid --display folder";
+    }
+    {
+      path = "/Users/neil/Downloads";
+      section = "others";
+      options = "--sort name --view grid --display folder";
+    }
+  ];
+  normalize = path: if lib.hasSuffix ".app" path then path + "/" else path;
+  entryURI = path:
+    "file://"
+    + (builtins.replaceStrings [ " " "!" ''"'' "#" "$" "%" "&" "'" "(" ")" ] [
+      "%20"
+      "%21"
+      "%22"
+      "%23"
+      "%24"
+      "%25"
+      "%26"
+      "%27"
+      "%28"
+      "%29"
+    ] (normalize path));
+  wantURIs = lib.concatMapStrings (entry: ''
+    ${entryURI entry.path}
+  '') entries;
+  createEntries = lib.concatMapStrings (entry: ''
+    ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --add '${entry.path}' --section '${entry.section}' ${entry.options}
+  '') entries;
 
 in {
   # home-manger configs
@@ -15,6 +70,17 @@ in {
     /usr/bin/killall WallpaperAgent
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
+
+  home.activation.dock = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
+    echo >&2 "Setting up the dock..."
+    haveURIs="$(${pkgs.dockutil}/bin/dockutil ${plist} --list | ${pkgs.coreutils}/bin/cut -f2)"
+    if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
+      ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --remove all
+      ${createEntries}
+      /usr/bin/killall Dock
+    fi
+  '';
+
   home.packages = with pkgs; [
     ripgrep
     fd

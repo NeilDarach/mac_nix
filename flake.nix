@@ -21,7 +21,7 @@
         src = nixpkgs.legacyPackages."aarch64-darwin".applyPatches {
           name = "nix-darwin";
           src = inputs.darwin;
-          patches = [ ./patches/dock.nix.patch ];
+          patches = [ ];
         };
       in nixpkgs.lib.fix
       (self: (import "${src}/flake.nix").outputs { inherit self nixpkgs; });
@@ -64,7 +64,13 @@
                 backupFileExtension = "bak";
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                extraSpecialArgs = { inherit inputs; };
+                extraSpecialArgs = {
+                  inherit inputs;
+                  pkgs-unstable = import nixpkgs-unstable {
+                    inherit system;
+                    config.allowUnfree = true;
+                  };
+                };
                 users.neil.imports = [ ./modules/home-manager ];
               };
             }
@@ -80,7 +86,14 @@
             allowUnfreePredicate = _: true;
           };
         };
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = {
+          inherit inputs;
+          pkgs-unstable = import nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          inherit system;
+        };
         modules = [ ./modules/home-manager ];
       };
     };

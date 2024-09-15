@@ -34,23 +34,6 @@
     NSGlobalDomain.KeyRepeat = 5;
     NSGlobalDomain."com.apple.swipescrolldirection" = false;
     dock = {
-      persistent-apps = [
-        "/System/Applications/System Settings.app"
-        "${pkgs.firefox-bin}/Applications/Firefox.app"
-        "${pkgs.alacritty}/Applications/Alacritty.app"
-        "${pkgs-unstable.neovide}/Applications/Neovide.app"
-      ];
-      persistent-others = [
-        {
-          name = "/Applications";
-          displayas = 1;
-        }
-        {
-          name = "/Users/neil/Downloads";
-          displayas = 1;
-        }
-      ];
-      #persistent-others = [ "/Applications" "/Users/neil/Downloads" ];
       show-recents = false;
       orientation = "left";
     };
