@@ -1,47 +1,61 @@
 { config, inputs, pkgs, pkgs-unstable, lib, ... }:
-let
-  wallpaper = ./wallpaper.plist;
+let wallpaper = ./wallpaper.plist;
 
 in {
   # home-manger configs
   #imports = [ inputs.nixNvim.nixosModules.default ];
   local = {
-    dock.enable = true;
-        dock.orientation = "left";
-    dock.entries = [
-      {
-        path = "/System/Applications/System Settings.app";
-        section = "apps";
-        options = "";
-      }
-      {
-        path = "${pkgs.firefox-bin}/Applications/Firefox.app";
-        section = "apps";
-        options = "";
-      }
-      {
-        path = "${pkgs.alacritty}/Applications/Alacritty.app";
-        section = "apps";
-        options = "";
-      }
-      {
-        path = "${pkgs-unstable.neovide}/Applications/Neovide.app";
-        section = "apps";
-        options = "";
-      }
-      {
-        path = "/Applications";
-        section = "others";
-        options = "--sort name --view grid --display folder";
-      }
-      {
-        path = "/Users/neil/Downloads";
-        section = "others";
-        options = "--sort name --view grid --display folder";
-      }
-    ];
+    extensions = {
+      enable = true;
+      entries = [
+        {
+          uti = "public.mpeg-4";
+          bundle = "org.videolan.vlc";
+        }
+        {
+          uti = "com.apple.quicktime-movie";
+          bundle = "org.videolan.vlc";
+        }
+      ];
+    };
+    dock = {
+      enable = true;
+      orientation = "left";
+      entries = [
+        {
+          path = "/System/Applications/System Settings.app";
+          section = "apps";
+          options = "";
+        }
+        {
+          path = "${pkgs.firefox-bin}/Applications/Firefox.app";
+          section = "apps";
+          options = "";
+        }
+        {
+          path = "${pkgs.alacritty}/Applications/Alacritty.app";
+          section = "apps";
+          options = "";
+        }
+        {
+          path = "${pkgs-unstable.neovide}/Applications/Neovide.app";
+          section = "apps";
+          options = "";
+        }
+        {
+          path = "/Applications";
+          section = "others";
+          options = "--sort name --view grid --display folder";
+        }
+        {
+          path = "/Users/neil/Downloads";
+          section = "others";
+          options = "--sort name --view grid --display folder";
+        }
+      ];
+    };
   };
-  imports = [ ./dock ];
+  imports = [ ./dock ./extensions ];
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
     run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
