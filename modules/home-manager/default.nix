@@ -1,64 +1,47 @@
 { config, inputs, pkgs, pkgs-unstable, lib, ... }:
 let
   wallpaper = ./wallpaper.plist;
-  plist = "/Users/neil/Library/Preferences/com.apple.dock.plist";
-  entries = [
-    {
-      path = "/System/Applications/System Settings.app";
-      section = "apps";
-      options = "";
-    }
-    {
-      path = "${pkgs.firefox-bin}/Applications/Firefox.app";
-      section = "apps";
-      options = "";
-    }
-    {
-      path = "${pkgs.alacritty}/Applications/Alacritty.app";
-      section = "apps";
-      options = "";
-    }
-    {
-      path = "${pkgs-unstable.neovide}/Applications/Neovide.app";
-      section = "apps";
-      options = "";
-    }
-    {
-      path = "/Applications";
-      section = "others";
-      options = "--sort name --view grid --display folder";
-    }
-    {
-      path = "/Users/neil/Downloads";
-      section = "others";
-      options = "--sort name --view grid --display folder";
-    }
-  ];
-  normalize = path: if lib.hasSuffix ".app" path then path + "/" else path;
-  entryURI = path:
-    "file://"
-    + (builtins.replaceStrings [ " " "!" ''"'' "#" "$" "%" "&" "'" "(" ")" ] [
-      "%20"
-      "%21"
-      "%22"
-      "%23"
-      "%24"
-      "%25"
-      "%26"
-      "%27"
-      "%28"
-      "%29"
-    ] (normalize path));
-  wantURIs = lib.concatMapStrings (entry: ''
-    ${entryURI entry.path}
-  '') entries;
-  createEntries = lib.concatMapStrings (entry: ''
-    ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --add '${entry.path}' --section '${entry.section}' ${entry.options} >/dev/null
-  '') entries;
 
 in {
   # home-manger configs
   #imports = [ inputs.nixNvim.nixosModules.default ];
+  local = {
+    dock.enable = true;
+        dock.orientation = "left";
+    dock.entries = [
+      {
+        path = "/System/Applications/System Settings.app";
+        section = "apps";
+        options = "";
+      }
+      {
+        path = "${pkgs.firefox-bin}/Applications/Firefox.app";
+        section = "apps";
+        options = "";
+      }
+      {
+        path = "${pkgs.alacritty}/Applications/Alacritty.app";
+        section = "apps";
+        options = "";
+      }
+      {
+        path = "${pkgs-unstable.neovide}/Applications/Neovide.app";
+        section = "apps";
+        options = "";
+      }
+      {
+        path = "/Applications";
+        section = "others";
+        options = "--sort name --view grid --display folder";
+      }
+      {
+        path = "/Users/neil/Downloads";
+        section = "others";
+        options = "--sort name --view grid --display folder";
+      }
+    ];
+  };
+  imports = [ ./dock ];
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
     run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
@@ -69,16 +52,6 @@ in {
     /usr/libexec/PlistBuddy -c "Clear dict" -c "Merge ${wallpaper}" -c Save ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist
     /usr/bin/killall WallpaperAgent
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-  '';
-
-  home.activation.dock = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
-    echo >&2 "Setting up the dock..."
-    haveURIs="$(${pkgs.dockutil}/bin/dockutil ${plist} --list | ${pkgs.coreutils}/bin/cut -f2)"
-    if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >/dev/null; then
-      ${pkgs.dockutil}/bin/dockutil ${plist} --no-restart --remove all >/dev/null
-      ${createEntries}
-      /usr/bin/killall Dock
-    fi
   '';
 
   home.packages = with pkgs; [
@@ -95,7 +68,6 @@ in {
     gcc
     vlc-bin-universal
     inputs.nixNvim.packages.${pkgs.system}.nvim
-    dockutil
   ];
   home.stateVersion = "24.05";
   home.username = "neil";

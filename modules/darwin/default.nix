@@ -33,9 +33,5 @@
     NSGlobalDomain.InitialKeyRepeat = 14;
     NSGlobalDomain.KeyRepeat = 5;
     NSGlobalDomain."com.apple.swipescrolldirection" = false;
-    dock = {
-      show-recents = false;
-      orientation = "left";
-    };
   };
 }
