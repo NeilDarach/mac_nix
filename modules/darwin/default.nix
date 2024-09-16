@@ -17,7 +17,7 @@
     enable = true;
     taps = [ ];
     brews = [ "mas" ];
-    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" "dropbox" ];
+    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" "dropbox" "orcaslicer"];
   };
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [

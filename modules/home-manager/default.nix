@@ -81,7 +81,9 @@ in {
     ruby
     gcc
     vlc-bin-universal
+    inkscape
     inputs.nixNvim.packages.${pkgs.system}.nvim
+    tmux
   ];
   home.stateVersion = "24.05";
   home.username = "neil";
