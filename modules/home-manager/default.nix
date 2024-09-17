@@ -48,7 +48,7 @@ in {
           options = "--sort name --view grid --display folder";
         }
         {
-          path = "/Users/neil/Downloads";
+          path = "~/Downloads";
           section = "others";
           options = "--sort name --view grid --display folder";
         }
@@ -57,10 +57,10 @@ in {
   };
   imports = [ ./dock ./extensions ];
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
-    run mv /Users/neil/Library/Application\ Support/Firefox/profiles.ini /Users/neil/Library/Application\ Support/Firefox/profiles.hm
-    run cp /Users/neil/Library/Application\ Support/Firefox/profiles.hm /Users/neil/Library/Application\ Support/Firefox/profiles.ini
-    run rm -f /Users/neil/Library/Application\ Support/Firefox/profiles.ini.bak
-    run chmod u+w /Users/neil/Library/Application\ Support/Firefox/profiles.ini
+    run mv $HOME/Library/Application\ Support/Firefox/profiles.ini $HOME/Library/Application\ Support/Firefox/profiles.hm
+    run cp $HOME/Library/Application\ Support/Firefox/profiles.hm $HOME/Library/Application\ Support/Firefox/profiles.ini
+    run rm -f $HOME/Library/Application\ Support/Firefox/profiles.ini.bak
+    run chmod u+w $HOME/Library/Application\ Support/Firefox/profiles.ini
   '';
   home.activation.desktop = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     /usr/libexec/PlistBuddy -c "Clear dict" -c "Merge ${wallpaper}" -c Save ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist
