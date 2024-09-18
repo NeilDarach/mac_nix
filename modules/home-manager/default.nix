@@ -43,7 +43,7 @@ in {
           options = "";
         }
         {
-          path = "/Applications";
+          path = "~/HomeApplications";
           section = "others";
           options = "--sort name --view grid --display folder";
         }
@@ -56,6 +56,18 @@ in {
     };
   };
   imports = [ ./dock ./extensions ];
+  home.activation.appSymlinks = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
+    run rm -rf ~/HomeApplications
+    run mkdir -p ~/HomeApplications
+    run ln -s /Applications/OrcaSlicer.app ~/HomeApplications
+    run ln -s /Applications/1Password.app ~/HomeApplications
+    run ln -s /Applications/Dropbox.app ~/HomeApplications
+    run ln -s "/Applications/MQTT Explorer.app" ~/HomeApplications
+    run ln -s "$(realpath "$HOME/Applications/Autodesk Fusion.app")" ~/HomeApplications
+    run ln -s "${pkgs.vlc-bin-universal}/Applications/VLC.app" ~/HomeApplications
+    run ln -s "${pkgs.inkscape}/Applications/Inkscape.app" ~/HomeApplications
+
+    '';
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv $HOME/Library/Application\ Support/Firefox/profiles.ini $HOME/Library/Application\ Support/Firefox/profiles.hm
     run cp $HOME/Library/Application\ Support/Firefox/profiles.hm $HOME/Library/Application\ Support/Firefox/profiles.ini
@@ -96,7 +108,7 @@ in {
   home.shellAliases = {
     ls = "ls --color=auto -F";
     nr = "darwin-rebuild switch --flake ~/mac_nix/.#";
-    hr = "home-manager switch -b bkp --flake ~/mac_nix/.#$(whoami)";
+    hr = "home-manager switch -b bak --flake ~/mac_nix/.#$(whoami)";
     rg = "batgrep";
     cat = "bat";
     less = "bat";
