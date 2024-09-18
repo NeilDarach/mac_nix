@@ -96,7 +96,7 @@ in {
   home.shellAliases = {
     ls = "ls --color=auto -F";
     nr = "darwin-rebuild switch --flake ~/mac_nix/.#";
-    hr = "home-manager switch --flake ~/mac_nix/.#$(whoami)";
+    hr = "home-manager switch -b bkp --flake ~/mac_nix/.#$(whoami)";
     rg = "batgrep";
     cat = "bat";
     less = "bat";
