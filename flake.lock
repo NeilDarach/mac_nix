@@ -626,16 +626,15 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1725612768,
+        "lastModified": 1727022772,
         "narHash": "sha256-F/lw/pDTvbKbpg1YQNraES1eJQ9eSjTzQr4b9GuWzn8=",
         "owner": "NeilDarach",
         "repo": "nixNvim",
-        "rev": "82d50d766c8efc4c4678f77ce62244cfb4e4261d",
+        "rev": "f6d3f4487e5ae24389e7b435f1f47a6affe75172",
         "type": "github"
       },
       "original": {
         "owner": "NeilDarach",
-        "ref": "lze",
         "repo": "nixNvim",
         "type": "github"
       }

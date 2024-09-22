@@ -67,7 +67,7 @@ in {
     run ln -s "${pkgs.vlc-bin-universal}/Applications/VLC.app" ~/HomeApplications
     run ln -s "${pkgs.inkscape}/Applications/Inkscape.app" ~/HomeApplications
 
-    '';
+  '';
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run mv $HOME/Library/Application\ Support/Firefox/profiles.ini $HOME/Library/Application\ Support/Firefox/profiles.hm
     run cp $HOME/Library/Application\ Support/Firefox/profiles.hm $HOME/Library/Application\ Support/Firefox/profiles.ini
@@ -114,6 +114,15 @@ in {
     less = "bat";
   };
 
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    nix-direnv.enable = true;
+    config = builtins.fromTOML ''
+      [global]
+      hide_env_diff = true
+    '';
+  };
   programs.bat = {
     enable = true;
     extraPackages = with pkgs.bat-extras; [ batgrep ];

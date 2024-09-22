@@ -8,7 +8,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nixNvim.url = "github:NeilDarach/nixNvim/lze";
+    nixNvim.url = "github:NeilDarach/nixNvim";
     firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     firefox-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nur.url = "github:nix-community/NUR";
