@@ -141,6 +141,10 @@ in {
       ];
       makeBinSearchPath = lib.concatMapStringsSep " " (path: "${path}/bin");
     in ''
+      if status is-interactive; and not set -q TMUX
+        tmux ls 2>/dev/null | grep -vq attached ; and exec tmux attach-session
+        exec tmux
+      end
       fish_add_path --move --prepend --path ${makeBinSearchPath profiles}
       set fish_user_paths $fish_user_paths  
       fish_vi_key_bindings
