@@ -130,7 +130,7 @@ in {
   };
   programs.fish = {
     enable = true;
-    functions = { flake-update = "nix flake lock --update-input $argv[1]"; };
+    shellAbbrs = { nu = "nix flake lock --update-input"; };
     loginShellInit = let
       profiles = [
         "/etc/profiles/per-user/$USER"
