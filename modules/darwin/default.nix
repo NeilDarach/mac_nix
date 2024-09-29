@@ -12,12 +12,21 @@
   programs.fish.enable = true;
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.loginShell = pkgs.fish;
-  environment.systemPackages = with pkgs; [ home-manager ];
+  environment.systemPackages = with pkgs; [ home-manager jankyborders ];
+
+
   homebrew = {
     enable = true;
-    taps = [ ];
+    taps = [];
     brews = [ "mas" ];
-    casks = [ "1password" "autodesk-fusion" "mqtt-explorer" "dropbox" "orcaslicer"];
+    casks = [
+      "nikitabobko/tap/aerospace"
+      "1password"
+      "autodesk-fusion"
+      "mqtt-explorer"
+      "dropbox"
+      "orcaslicer"
+    ];
   };
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [
