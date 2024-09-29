@@ -14,10 +14,9 @@
   environment.loginShell = pkgs.fish;
   environment.systemPackages = with pkgs; [ home-manager jankyborders ];
 
-
   homebrew = {
     enable = true;
-    taps = [];
+    taps = [ ];
     brews = [ "mas" ];
     casks = [
       "nikitabobko/tap/aerospace"
@@ -26,6 +25,7 @@
       "mqtt-explorer"
       "dropbox"
       "orcaslicer"
+      "quicksilver"
     ];
   };
   system.keyboard.enableKeyMapping = true;

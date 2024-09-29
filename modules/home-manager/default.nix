@@ -178,8 +178,6 @@ in {
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
     alt-4 = 'workspace 4'
     alt-5 = 'workspace 5'
     alt-6 = 'workspace 6'
@@ -189,8 +187,6 @@ in {
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
     alt-shift-1 = 'move-node-to-workspace 1'
-    alt-shift-2 = 'move-node-to-workspace 2'
-    alt-shift-3 = 'move-node-to-workspace 3'
     alt-shift-4 = 'move-node-to-workspace 4'
     alt-shift-5 = 'move-node-to-workspace 5'
     alt-shift-6 = 'move-node-to-workspace 6'
@@ -202,6 +198,15 @@ in {
     alt-tab = 'workspace-back-and-forth'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+
+    alt-enter = [ ''''exec-and-forget osascript -e '
+    tell application "System events" to tell dock preferences
+    set autohide to not autohide
+    end tell'
+    '''' 
+    ]
+    alt-t = [ 'exec-and-forget ${pkgs.alacritty}/bin/alacritty msg create-window' ]
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     alt-shift-semicolon = 'mode service'
@@ -219,6 +224,15 @@ in {
     alt-shift-j = ['join-with down', 'mode main']
     alt-shift-k = ['join-with up', 'mode main']
     alt-shift-l = ['join-with right', 'mode main']
+
+
+    #[[on-window-detected]]
+    #run = [ ''''exec-and-forget osascript -e '
+    #tell application "System events" to tell dock preferences
+    #set autohide to true
+    #end tell'
+    #''''
+    #]
   '';
 
   home.packages = with pkgs; [
@@ -256,7 +270,16 @@ in {
 
   programs.tmux = {
     enable = true;
+    keyMode = "vi";
+    mouse = true;
+
     extraConfig = ''
+      # Copy mode
+      bind-key -T copy-mode-vi 'v' send -X begin-selection     # Begin selection in copy mode.
+      bind-key -T copy-mode-vi 'C-v' send -X rectangle-toggle  # Begin selection in copy mode.
+      bind-key -T copy-mode-vi 'y' send -X copy-selection      # Yank selection in copy mode.
+      # unbind-key -T copy-mode-vi v
+
       # Smart pane switching with awareness of Vim splits.
       # See: https://github.com/christoomey/vim-tmux-navigator
       is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
