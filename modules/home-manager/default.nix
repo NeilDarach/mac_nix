@@ -20,6 +20,7 @@ in {
     };
     dock = {
       enable = true;
+      autohide = true;
       orientation = "left";
       entries = [
         {
@@ -79,6 +80,9 @@ in {
     /usr/bin/killall WallpaperAgent
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
+  home.activation.aerospace = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        /usr/bin/open /Applications/Aerospace.app
+    '';
 
   xdg.configFile."aerospace/aerospace.toml".text = ''
     # You can use it to add commands that run after login to macOS user session.
@@ -177,22 +181,16 @@ in {
     alt-shift-equal = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-1 = 'workspace 1'
-    alt-4 = 'workspace 4'
-    alt-5 = 'workspace 5'
-    alt-6 = 'workspace 6'
-    alt-7 = 'workspace 7'
-    alt-8 = 'workspace 8'
-    alt-9 = 'workspace 9'
+    alt-q = 'workspace 1'
+    alt-w = 'workspace 4'
+    alt-e = 'workspace 5'
+    alt-r = 'workspace 6'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-1 = 'move-node-to-workspace 1'
-    alt-shift-4 = 'move-node-to-workspace 4'
-    alt-shift-5 = 'move-node-to-workspace 5'
-    alt-shift-6 = 'move-node-to-workspace 6'
-    alt-shift-7 = 'move-node-to-workspace 7'
-    alt-shift-8 = 'move-node-to-workspace 8'
-    alt-shift-9 = 'move-node-to-workspace 9'
+    alt-shift-q = 'move-node-to-workspace 1'
+    alt-shift-w = 'move-node-to-workspace 4'
+    alt-shift-e = 'move-node-to-workspace 5'
+    alt-shift-r = 'move-node-to-workspace 6'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-tab = 'workspace-back-and-forth'
@@ -206,7 +204,7 @@ in {
     end tell'
     '''' 
     ]
-    alt-t = [ 'exec-and-forget ${pkgs.alacritty}/bin/alacritty msg create-window' ]
+    alt-t = [ 'exec-and-forget ${pkgs.alacritty}/bin/alacritty msg create-window  || open ${pkgs.alacritty}/Applications/Alacritty.app' ]
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     alt-shift-semicolon = 'mode service'

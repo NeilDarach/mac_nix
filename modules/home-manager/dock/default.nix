@@ -3,6 +3,7 @@ with lib;
 let
   cfg = config.local.dock;
   showrecents = if cfg.showrecents then "1" else "0";
+    autohide = if cfg.autohide then "1" else "0";
   inherit (pkgs) stdenv dockutil;
 in {
   options = {
@@ -10,6 +11,11 @@ in {
       description = "Update dock";
       default = stdenv.isDarwin;
       example = false;
+    };
+    local.dock.autohide = mkOption {
+      description = "Set the dock autohide option";
+      default = false;
+      example = true;
     };
     local.dock.orientation = mkOption {
       description = "Orientation of the dock";
@@ -74,6 +80,7 @@ in {
 
       /usr/bin/defaults write com.apple.dock orientation -string ${cfg.orientation}
       /usr/bin/defaults write com.apple.dock "show-recents" -int ${showrecents}
+      /usr/bin/defaults write com.apple.dock "autohide" -int ${autohide}
     '';
   });
 }
