@@ -82,6 +82,7 @@ in {
   '';
   home.activation.aerospace = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         /usr/bin/open /Applications/Aerospace.app
+        /opt/homebrew/bin/aerospace reload-config
     '';
 
   xdg.configFile."aerospace/aerospace.toml".text = ''
@@ -198,11 +199,12 @@ in {
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 
-    alt-enter = [ ''''exec-and-forget osascript -e '
+    alt-d = [ ''''exec-and-forget /usr/bin/osascript -e '
     tell application "System events" to tell dock preferences
     set autohide to not autohide
     end tell'
-    '''' 
+    '''',
+    'exec-and-forget sleep 0.5s; /opt/homebrew/bin/aerospace balance-sizes'
     ]
     alt-t = [ 'exec-and-forget ${pkgs.alacritty}/bin/alacritty msg create-window  || open ${pkgs.alacritty}/Applications/Alacritty.app' ]
 
@@ -275,7 +277,7 @@ in {
       # Copy mode
       bind-key -T copy-mode-vi 'v' send -X begin-selection     # Begin selection in copy mode.
       bind-key -T copy-mode-vi 'C-v' send -X rectangle-toggle  # Begin selection in copy mode.
-      bind-key -T copy-mode-vi 'y' send -X copy-selection      # Yank selection in copy mode.
+      bind-key -T copy-mode-vi 'y' send -X copy-selection \; run "tmux show-buffer | pbcopy"      # Yank selection in copy mode.
       # unbind-key -T copy-mode-vi v
 
       # Smart pane switching with awareness of Vim splits.
