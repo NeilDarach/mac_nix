@@ -81,9 +81,9 @@ in {
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
   home.activation.aerospace = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        /usr/bin/open /Applications/Aerospace.app
-        /opt/homebrew/bin/aerospace reload-config
-    '';
+    /usr/bin/open /Applications/Aerospace.app
+    /opt/homebrew/bin/aerospace reload-config
+  '';
 
   xdg.configFile."aerospace/aerospace.toml".text = ''
     # You can use it to add commands that run after login to macOS user session.
@@ -131,8 +131,8 @@ in {
     #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
     #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
     [gaps]
-    inner.horizontal = 0
-    inner.vertical =   0
+    inner.horizontal = 5
+    inner.vertical =   5
     outer.left =       5
     outer.bottom =     5
     outer.top =        5
@@ -165,11 +165,14 @@ in {
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 
+
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     alt-h = 'focus left'
     alt-j = 'focus down'
     alt-k = 'focus up'
     alt-l = 'focus right'
+
+    alt-f = 'fullscreen'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
     alt-shift-h = 'move left'
@@ -207,7 +210,17 @@ in {
     'exec-and-forget sleep 0.5s; /opt/homebrew/bin/aerospace balance-sizes'
     ]
     alt-t = [ 'exec-and-forget ${pkgs.alacritty}/bin/alacritty msg create-window  || open ${pkgs.alacritty}/Applications/Alacritty.app' ]
-
+    alt-y = [ ''''exec-and-forget /usr/bin/osascript -e '
+              tell application "System Events"
+                try
+                  tell process "Firefox"
+                    click menu item "New Window" of menu "File" of menu bar 1
+                  end tell
+                on error
+                  tell application Firefox to activate
+                end try
+              end tell'
+        '''' ]
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     alt-shift-semicolon = 'mode service'
 
