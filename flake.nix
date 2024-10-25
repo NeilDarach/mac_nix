@@ -42,7 +42,7 @@
               users = {
                 neil = {
                   home = "/Users/neil";
-                  uid = 501;
+                  uid = 502;
                   shell = "/run/current-system/sw/bin/fish";
                 };
               };
@@ -78,7 +78,7 @@
       darwinConfigurations = {
 
         Neils-Virtual-Machine = darwin.lib.darwinSystem standardMac;
-        Neils-Macbook-Pro = darwin.lib.darwinSystem standardMac;
+        Neils-MacBook-Pro = darwin.lib.darwinSystem standardMac;
 
       };
       homeConfigurations."neil" = home-manager.lib.homeManagerConfiguration {
