@@ -346,9 +346,19 @@ in {
       makeBinSearchPath = lib.concatMapStringsSep " " (path: "${path}/bin");
     in ''
       if status is-interactive; and not set -q TMUX
+        if not set -q SSH_CLIENT
+          tmux unbind c-b 2>/dev/null
+          tmux set -g prefix c-a 2>/dev/null
+          tmux bind c-a send-prefix 2>/dev/null
+        else
+          tmux unbind c-a 2>/dev/null
+          tmux set -g prefix c-b 2>/dev/null
+          tmux bind c-b send-prefix 2>/dev/null
+        end
         tmux ls 2>/dev/null | grep -vq attached ; and exec tmux attach-session
         exec tmux
       end
+
       fish_add_path --move --prepend --path ${makeBinSearchPath profiles}
       set fish_user_paths $fish_user_paths  
       fish_vi_key_bindings
@@ -383,7 +393,7 @@ in {
     alacritty = {
       enable = true;
       settings.font.normal.family = "SauceCodePro Nerd Font Mono";
-      settings.font.size = 16;
+      settings.font.size = 14;
     };
     firefox = {
       enable = true;
