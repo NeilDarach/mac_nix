@@ -8,11 +8,25 @@
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
+  nix.linux-builder = {
+    enable = true;
+    ephemeral = true;
+    maxJobs = 4;
+    config = {
+      virtualisation = {
+        darwin-builder = {
+          diskSize = 40 * 1024;
+          memorySize = 8 * 1024;
+        };
+        cores = 6;
+      };
+    };
+  };
   programs.zsh.enable = true;
   programs.fish.enable = true;
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.loginShell = pkgs.fish;
-  environment.systemPackages = with pkgs; [ home-manager jankyborders ];
+  environment.systemPackages = with pkgs; [ nixos-rebuild home-manager jankyborders ];
 
   homebrew = {
     enable = true;
