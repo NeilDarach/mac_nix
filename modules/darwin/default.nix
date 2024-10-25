@@ -26,6 +26,7 @@
       "dropbox"
       "orcaslicer"
       "quicksilver"
+      "steam"
     ];
   };
   system.keyboard.enableKeyMapping = true;

@@ -60,6 +60,7 @@ in {
   home.activation.appSymlinks = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run rm -rf ~/HomeApplications
     run mkdir -p ~/HomeApplications
+    run ln -s /Applications/Steam.app ~/HomeApplications
     run ln -s /Applications/OrcaSlicer.app ~/HomeApplications
     run ln -s /Applications/1Password.app ~/HomeApplications
     run ln -s /Applications/Dropbox.app ~/HomeApplications
