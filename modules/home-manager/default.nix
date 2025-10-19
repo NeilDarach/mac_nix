@@ -82,8 +82,8 @@ in {
      /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
   home.activation.aerospace = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    /usr/bin/open /Applications/Aerospace.app
-     /opt/homebrew/bin/aerospace reload-config
+    /usr/bin/open ${pkgs.aerospace}/Applications/Aerospace.app
+     ${pkgs.aerospace}/bin/aerospace reload-config
   '';
 
   xdg.configFile."aerospace/aerospace.toml".text = ''
@@ -208,7 +208,7 @@ in {
     set autohide to not autohide
     end tell'
     '''',
-    'exec-and-forget sleep 0.5s; /opt/homebrew/bin/aerospace balance-sizes'
+    'exec-and-forget sleep 0.5s; ${pkgs.aerospace}/bin/aerospace balance-sizes'
     ]
     alt-t = [ 'exec-and-forget ${pkgs.alacritty}/bin/alacritty msg create-window  || open ${pkgs.alacritty}/Applications/Alacritty.app' ]
     alt-y = [ ''''exec-and-forget /usr/bin/osascript -e '

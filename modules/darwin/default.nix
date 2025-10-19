@@ -28,6 +28,7 @@
   environment.systemPackages = with pkgs; [
     nixos-rebuild
     home-manager
+    aerospace
     jankyborders
     sshfs
     dua
@@ -38,7 +39,6 @@
     taps = [ ];
     brews = [ "mas" ];
     casks = [
-      "nikitabobko/tap/aerospace"
       "1password"
       "autodesk-fusion"
       "mqtt-explorer"
