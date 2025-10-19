@@ -30,7 +30,7 @@
     home-manager
     jankyborders
     sshfs
-        dua
+    dua
   ];
 
   homebrew = {
@@ -48,18 +48,17 @@
       "steam"
       "macfuse"
       "handbrake"
-      "google-chrome"
     ];
   };
   system.keyboard.enableKeyMapping = true;
   fonts.packages = [
-    (pkgs.nerdfonts.override {
-      fonts = [ "SourceCodePro" "Meslo" "NerdFontsSymbolsOnly" ];
-    })
+    pkgs.nerd-fonts.sauce-code-pro
+    pkgs.nerd-fonts.meslo-lg
+    pkgs.nerd-fonts.symbols-only
   ];
-  services.nix-daemon.enable = true;
 
   system.stateVersion = 5;
+  system.primaryUser = "neil";
   system.defaults = {
     finder._FXShowPosixPathInTitle = true;
     NSGlobalDomain.InitialKeyRepeat = 14;

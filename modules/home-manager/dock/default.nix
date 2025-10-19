@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.local.dock;
   showrecents = if cfg.showrecents then "1" else "0";
-    autohide = if cfg.autohide then "1" else "0";
+  autohide = if cfg.autohide then "1" else "0";
   inherit (pkgs) stdenv dockutil;
 in {
   options = {
@@ -71,15 +71,15 @@ in {
   in {
     home.activation.dock = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
       echo >&2 "Setting up the dock..."
-      haveURIs="$(${dockutil}/bin/dockutil --list $HOME | ${pkgs.coreutils}/bin/cut -f2)"
+          haveURIs="$(${dockutil}/bin/dockutil --list $HOME | ${pkgs.coreutils}/bin/cut -f2)"
       if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >/dev/null; then
-        ${dockutil}/bin/dockutil --no-restart --remove all $HOME >/dev/null
-        ${createEntries}
-        /usr/bin/killall Dock
-      fi
+      ${dockutil}/bin/dockutil --no-restart --remove all $HOME >/dev/null
+          ${createEntries}
+      /usr/bin/killall Dock
+          fi
 
-      /usr/bin/defaults write com.apple.dock orientation -string ${cfg.orientation}
-      /usr/bin/defaults write com.apple.dock "show-recents" -int ${showrecents}
+          /usr/bin/defaults write com.apple.dock orientation -string ${cfg.orientation}
+          /usr/bin/defaults write com.apple.dock "show-recents" -int ${showrecents}
       /usr/bin/defaults write com.apple.dock "autohide" -int ${autohide}
     '';
   });

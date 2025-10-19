@@ -77,13 +77,13 @@ in {
     run chmod u+w $HOME/Library/Application\ Support/Firefox/profiles.ini
   '';
   home.activation.desktop = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
-    /usr/libexec/PlistBuddy -c "Clear dict" -c "Merge ${wallpaper}" -c Save ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist
+     /usr/libexec/PlistBuddy -c "Clear dict" -c "Merge ${wallpaper}" -c Save ~/Library/Application\ Support/com.apple.wallpaper/Store/Index.plist
     /usr/bin/killall WallpaperAgent
-    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
   home.activation.aerospace = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     /usr/bin/open /Applications/Aerospace.app
-    /opt/homebrew/bin/aerospace reload-config
+     /opt/homebrew/bin/aerospace reload-config
   '';
 
   xdg.configFile."aerospace/aerospace.toml".text = ''
@@ -401,7 +401,7 @@ in {
       enable = true;
       package = pkgs.firefox-bin;
       profiles.neil = {
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin
           onepassword-password-manager
         ];

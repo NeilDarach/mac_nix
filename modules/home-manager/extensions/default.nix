@@ -2,10 +2,10 @@
 with lib;
 let
   cfg = config.local.extensions;
-  inherit (pkgs) stdenv ;
+  inherit (pkgs) stdenv;
 in {
-    # See https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html
-    # for a list of uti options.
+  # See https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html
+  # for a list of uti options.
   options = {
     local.extensions.enable = mkOption {
       description = "Modify application associaions";
@@ -34,7 +34,7 @@ in {
   in {
     home.activation.extensions = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
       echo >&2 "Setting up the extensions..."
-        ${createEntries}
+      ${createEntries}
     '';
   });
 }
