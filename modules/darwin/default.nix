@@ -25,7 +25,6 @@
   programs.zsh.enable = true;
   programs.fish.enable = true;
   environment.shells = with pkgs; [ fish bash zsh ];
-  environment.loginShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
     nixos-rebuild
     home-manager

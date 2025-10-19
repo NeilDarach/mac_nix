@@ -264,6 +264,7 @@ in {
     vlc-bin-universal
     inkscape
     typst
+    just
     inputs.nixNvim.packages.${pkgs.system}.nvim
   ];
   home.stateVersion = "24.05";
