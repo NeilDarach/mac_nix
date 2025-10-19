@@ -32,6 +32,7 @@
     jankyborders
     sshfs
     dua
+        mqtt-explorer
   ];
 
   homebrew = {
@@ -41,7 +42,6 @@
     casks = [
       "1password"
       "autodesk-fusion"
-      "mqtt-explorer"
       "dropbox"
       "orcaslicer"
       "quicksilver"

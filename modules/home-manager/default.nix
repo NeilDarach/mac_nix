@@ -64,7 +64,7 @@ in {
     run ln -s /Applications/OrcaSlicer.app ~/HomeApplications
     run ln -s /Applications/1Password.app ~/HomeApplications
     run ln -s /Applications/Dropbox.app ~/HomeApplications
-    run ln -s "/Applications/MQTT Explorer.app" ~/HomeApplications
+    run ln -s "${pkgs.mqtt-explorer}/Applications/MQTT Explorer.app" ~/HomeApplications
     run ln -s "$(realpath "$HOME/Applications/Autodesk Fusion.app")" ~/HomeApplications
     run ln -s "${pkgs.vlc-bin-universal}/Applications/VLC.app" ~/HomeApplications
     run ln -s "${pkgs.inkscape}/Applications/Inkscape.app" ~/HomeApplications
