@@ -38,11 +38,11 @@ in {
           section = "apps";
           options = "";
         }
-        {
-          path = "${pkgs-unstable.neovide}/Applications/Neovide.app";
-          section = "apps";
-          options = "";
-        }
+        #{
+        #path = "${pkgs-unstable.neovide}/Applications/Neovide.app";
+        #section = "apps";
+        #options = "";
+        #}
         {
           path = "~/HomeApplications";
           section = "others";
@@ -263,6 +263,7 @@ in {
     gcc
     vlc-bin-universal
     inkscape
+    typst
     inputs.nixNvim.packages.${pkgs.system}.nvim
   ];
   home.stateVersion = "24.05";

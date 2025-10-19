@@ -26,7 +26,13 @@
   programs.fish.enable = true;
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.loginShell = pkgs.fish;
-  environment.systemPackages = with pkgs; [ nixos-rebuild home-manager jankyborders ];
+  environment.systemPackages = with pkgs; [
+    nixos-rebuild
+    home-manager
+    jankyborders
+    sshfs
+        dua
+  ];
 
   homebrew = {
     enable = true;
@@ -41,6 +47,9 @@
       "orcaslicer"
       "quicksilver"
       "steam"
+      "macfuse"
+      "handbrake"
+      "google-chrome"
     ];
   };
   system.keyboard.enableKeyMapping = true;
