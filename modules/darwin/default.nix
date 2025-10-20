@@ -24,6 +24,8 @@
   };
   programs.zsh.enable = true;
   programs.fish.enable = true;
+  programs._1password.enable = true;
+  programs._1password-gui.enable = true;
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.systemPackages = with pkgs; [
     nixos-rebuild
@@ -32,7 +34,7 @@
     jankyborders
     sshfs
     dua
-        mqtt-explorer
+    mqtt-explorer
   ];
 
   homebrew = {
@@ -40,7 +42,6 @@
     taps = [ ];
     brews = [ "mas" ];
     casks = [
-      "1password"
       "autodesk-fusion"
       "dropbox"
       "orcaslicer"
