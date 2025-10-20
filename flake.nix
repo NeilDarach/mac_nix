@@ -10,6 +10,8 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     nixNvim.url = "github:NeilDarach/nixNvim";
     nur.url = "github:nix-community/NUR";
+    firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
+    firefox-darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -18,7 +20,7 @@
       standardMac = {
         pkgs = import nixpkgs {
           system = "aarch64-darwin";
-          overlays = [ inputs.nur.overlays.default ];
+          overlays = [ inputs.nur.overlays.default inputs.firefox-darwin.overlay];
           config = {
             allowUnfree = true;
             allowUnfreePredicate = _: true;
@@ -82,7 +84,8 @@
       homeConfigurations."neil" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           system = "aarch64-darwin";
-          overlays = [ inputs.firefox-darwin.overlay inputs.nur.overlays.default ];
+          overlays =
+            [ inputs.firefox-darwin.overlay inputs.nur.overlays.default ];
           config = {
             allowUnfree = true;
             allowUnfreePredicate = _: true;

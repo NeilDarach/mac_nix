@@ -399,7 +399,6 @@ in {
     };
     firefox = {
       enable = true;
-      package = pkgs.firefox-bin;
       profiles.neil = {
         extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin
