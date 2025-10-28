@@ -3,6 +3,7 @@
   environment.etc = {
     "sudoers.d/10-nix-commands".text = ''
       neil ALL=(root) NOPASSWD:SETENV: /run/current-system/sw/bin/nix-env 
+      neil ALL=(root) NOPASSWD:SETENV: /run/current-system/sw/bin/darwin-rebuild
     '';
   };
   nix.extraOptions = ''
@@ -26,6 +27,7 @@
   programs.fish.enable = true;
   programs._1password.enable = true;
   programs._1password-gui.enable = true;
+
   environment.shells = with pkgs; [ fish bash zsh ];
   environment.systemPackages = with pkgs; [
     nixos-rebuild
@@ -35,6 +37,7 @@
     sshfs
     dua
     mqtt-explorer
+    google-chrome
   ];
 
   homebrew = {
@@ -43,7 +46,7 @@
     brews = [ "mas" ];
     casks = [
       "autodesk-fusion"
-      "dropbox"
+      "dropbox" 
       "orcaslicer"
       "quicksilver"
       "steam"

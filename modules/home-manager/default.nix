@@ -65,6 +65,7 @@ in {
     run ln -s /Applications/1Password.app ~/HomeApplications
     run ln -s /Applications/Dropbox.app ~/HomeApplications
     run ln -s "${pkgs.mqtt-explorer}/Applications/MQTT Explorer.app" ~/HomeApplications
+    run ln -s "${pkgs.google-chrome}/Applications/Google Chrome.app" ~/HomeApplications
     run ln -s "$(realpath "$HOME/Applications/Autodesk Fusion.app")" ~/HomeApplications
     run ln -s "${pkgs.vlc-bin-universal}/Applications/VLC.app" ~/HomeApplications
     run ln -s "${pkgs.inkscape}/Applications/Inkscape.app" ~/HomeApplications
@@ -83,7 +84,7 @@ in {
   '';
   home.activation.aerospace = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     /usr/bin/open ${pkgs.aerospace}/Applications/Aerospace.app
-     ${pkgs.aerospace}/bin/aerospace reload-config
+     ${pkgs.aerospace}/bin/aerospace reload-config || true
   '';
 
   xdg.configFile."aerospace/aerospace.toml".text = ''
@@ -184,6 +185,8 @@ in {
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
     alt-shift-minus = 'resize smart -50'
     alt-shift-equal = 'resize smart +50'
+    alt-shift-9 = 'resize smart-opposite -50'
+    alt-shift-0 = 'resize smart-opposite +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     alt-q = 'workspace 1'
