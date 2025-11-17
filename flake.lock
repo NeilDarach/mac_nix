@@ -621,11 +621,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1761239684,
-        "narHash": "sha256-vfflnkHa6f6mO6MocYiu/jgnY86GTH3kiIMuVUeo/bw=",
+        "lastModified": 1762930413,
+        "narHash": "sha256-Jpql0fR6kL+R08z34JjYonRxVvkUYcMXFeaMHr34zxY=",
         "owner": "NeilDarach",
         "repo": "nixNvim",
-        "rev": "f98cd4a52bd4221b1024f0447ea7a55aef16e293",
+        "rev": "a1ba4f9304ede2bcfc4f2ca2fd4405a175bc13a5",
         "type": "github"
       },
       "original": {

@@ -250,6 +250,10 @@ in {
     #end tell'
     #''''
     #]
+
+    [[on-window-detected]]
+      if.app-id = 'com.apple.iphonesimulator'
+      run = ['layout tiling']
   '';
 
   home.packages = with pkgs; [
@@ -260,14 +264,8 @@ in {
     plistwatch
     jq
     coreutils
-    perl
-    python3
-    ruby
-    gcc
     vlc-bin-universal
     inkscape
-    typst
-    just
     inputs.nixNvim.packages.${pkgs.system}.nvim
   ];
   home.stateVersion = "24.05";
