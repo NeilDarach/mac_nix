@@ -68,7 +68,7 @@ in {
     run ln -s "${pkgs.google-chrome}/Applications/Google Chrome.app" ~/HomeApplications
     run ln -s "$(realpath "$HOME/Applications/Autodesk Fusion.app")" ~/HomeApplications
     run ln -s "${pkgs.vlc-bin-universal}/Applications/VLC.app" ~/HomeApplications
-    run ln -s "${pkgs.inkscape}/Applications/Inkscape.app" ~/HomeApplications
+    #run ln -s "${pkgs.inkscape}/Applications/Inkscape.app" ~/HomeApplications
 
   '';
   home.activation.firefoxProfile = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
@@ -265,7 +265,6 @@ in {
     jq
     coreutils
     vlc-bin-universal
-    inkscape
     inputs.nixNvim.packages.${pkgs.system}.nvim
   ];
   home.stateVersion = "24.05";

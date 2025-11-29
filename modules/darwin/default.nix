@@ -46,12 +46,13 @@
     brews = [ "mas" ];
     casks = [
       "autodesk-fusion"
-      "dropbox" 
+      "dropbox"
       "orcaslicer"
       "quicksilver"
       "steam"
       "macfuse"
       "handbrake"
+      "inkscape"
     ];
   };
   system.keyboard.enableKeyMapping = true;
