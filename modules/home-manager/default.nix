@@ -282,6 +282,8 @@ in {
     rg = "batgrep";
     cat = "bat";
     less = "bat";
+    wm =
+      "open $(dirname $(readlink $(which aerospace)))/../Applications/Aerospace.app";
   };
 
   programs.tmux = {
