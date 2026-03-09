@@ -53,6 +53,7 @@
       "macfuse"
       "handbrake"
       "inkscape"
+      "ubiquiti-unifi-controller"
     ];
   };
   system.keyboard.enableKeyMapping = true;

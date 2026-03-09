@@ -3,7 +3,8 @@ let wallpaper = ./wallpaper.plist;
 
 in {
   # home-manger configs
-  #imports = [ inputs.nixNvim.nixosModules.default ];
+  imports = [ ./dock ./extensions inputs.nixNvim.homeModules.default ];
+  wrappers.neovim.enable = true;
   local = {
     extensions = {
       enable = true;
@@ -56,7 +57,6 @@ in {
       ];
     };
   };
-  imports = [ ./dock ./extensions ];
   home.activation.appSymlinks = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
     run rm -rf ~/HomeApplications
     run mkdir -p ~/HomeApplications
@@ -265,7 +265,6 @@ in {
     jq
     coreutils
     vlc-bin-universal
-    inputs.nixNvim.packages.${pkgs.system}.nvim
   ];
   home.stateVersion = "24.05";
   home.username = "neil";
