@@ -3,8 +3,7 @@ let wallpaper = ./wallpaper.plist;
 
 in {
   # home-manger configs
-  imports = [ ./dock ./extensions inputs.nixNvim.homeModules.default ];
-  wrappers.neovim.enable = true;
+  imports = [ ./dock ./extensions ];
   local = {
     extensions = {
       enable = true;

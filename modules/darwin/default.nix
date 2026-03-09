@@ -38,6 +38,7 @@
     dua
     mqtt-explorer
     google-chrome
+    inputs.nixNvim.packages.${system}.neovim
   ];
 
   homebrew = {
