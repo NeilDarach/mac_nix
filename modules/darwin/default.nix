@@ -38,7 +38,8 @@
     dua
     mqtt-explorer
     google-chrome
-    inputs.nixNvim.packages.${system}.neovim
+    inputs.nixNvim.packages.${pkgs.stdenv.hostPlatform.system}.neovim
+    inputs.nixNvim.packages.${pkgs.stdenv.hostPlatform.system}.localneovim
   ];
 
   homebrew = {
@@ -52,7 +53,7 @@
       "quicksilver"
       "steam"
       "macfuse"
-      "handbrake"
+      "handbrake-app"
       "inkscape"
       "ubiquiti-unifi-controller"
     ];

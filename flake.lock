@@ -93,11 +93,11 @@
         "wrappers": "wrappers"
       },
       "locked": {
-        "lastModified": 1773071835,
-        "narHash": "sha256-KCSvoT/Xokz4vT+EUlrLlh5xv4y/0lPq4xyIf8xGZp8=",
+        "lastModified": 1773231089,
+        "narHash": "sha256-e6cOtjsXLx80CDX/xXgLo2sW9IUOll6Lk3cIKjU4zdw=",
         "ref": "refs/heads/main",
-        "rev": "4a1d7335b84a1fcffaaafacb8c0fbacfea289ad2",
-        "revCount": 2,
+        "rev": "015e122e4add40840897fbb2624663564cbc94fe",
+        "revCount": 4,
         "type": "git",
         "url": "https://codeberg.org/NeilDarach/nvimWrapper"
       },

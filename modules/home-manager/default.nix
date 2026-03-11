@@ -1,9 +1,21 @@
-{ config, inputs, pkgs, pkgs-unstable, lib, ... }:
-let wallpaper = ./wallpaper.plist;
+{
+  config,
+  inputs,
+  pkgs,
+  pkgs-unstable,
+  lib,
+  ...
+}:
+let
+  wallpaper = ./wallpaper.plist;
 
-in {
+in
+{
   # home-manger configs
-  imports = [ ./dock ./extensions ];
+  imports = [
+    ./dock
+    ./extensions
+  ];
   local = {
     extensions = {
       enable = true;
@@ -280,8 +292,7 @@ in {
     rg = "batgrep";
     cat = "bat";
     less = "bat";
-    wm =
-      "open $(dirname $(readlink $(which aerospace)))/../Applications/Aerospace.app";
+    wm = "open $(dirname $(readlink $(which aerospace)))/../Applications/Aerospace.app";
   };
 
   programs.tmux = {
@@ -336,50 +347,61 @@ in {
   };
   programs.fish = {
     enable = true;
-    shellAbbrs = { nu = "nix flake lock --update-input"; };
-    loginShellInit = let
-      profiles = [
-        "/etc/profiles/per-user/$USER"
-        "$HOME/.nix-profile"
-        "(set -q XDG_STATE_HOME; and echo $XDG_STATE_HOME; or echo $HOME/.local/state)/nix/profile"
-        "/run/current-system/sw"
-        "/nix/var/nix/profiles/default"
-      ];
-      makeBinSearchPath = lib.concatMapStringsSep " " (path: "${path}/bin");
-    in ''
-      if status is-interactive; and not set -q TMUX
-        if not set -q SSH_CLIENT
-          tmux unbind c-b 2>/dev/null
-          tmux set -g prefix c-a 2>/dev/null
-          tmux bind c-a send-prefix 2>/dev/null
-        else
-          tmux unbind c-a 2>/dev/null
-          tmux set -g prefix c-b 2>/dev/null
-          tmux bind c-b send-prefix 2>/dev/null
+    shellAbbrs = {
+      nu = "nix flake lock --update-input";
+    };
+    loginShellInit =
+      let
+        profiles = [
+          "/etc/profiles/per-user/$USER"
+          "$HOME/.nix-profile"
+          "(set -q XDG_STATE_HOME; and echo $XDG_STATE_HOME; or echo $HOME/.local/state)/nix/profile"
+          "/run/current-system/sw"
+          "/nix/var/nix/profiles/default"
+        ];
+        makeBinSearchPath = lib.concatMapStringsSep " " (path: "${path}/bin");
+      in
+      ''
+        if status is-interactive; and not set -q TMUX
+          if not set -q SSH_CLIENT
+            tmux unbind c-b 2>/dev/null
+            tmux set -g prefix c-a 2>/dev/null
+            tmux bind c-a send-prefix 2>/dev/null
+          else
+            tmux unbind c-a 2>/dev/null
+            tmux set -g prefix c-b 2>/dev/null
+            tmux bind c-b send-prefix 2>/dev/null
+          end
+          tmux ls 2>/dev/null | grep -vq attached ; and exec tmux attach-session
+          exec tmux
         end
-        tmux ls 2>/dev/null | grep -vq attached ; and exec tmux attach-session
-        exec tmux
-      end
 
-      fish_add_path --move --prepend --path ${makeBinSearchPath profiles}
-      set fish_user_paths $fish_user_paths  
-      fish_vi_key_bindings
-      eval "$(/opt/homebrew/bin/brew shellenv)"
-      for p in /run/current-system/sw/bin
-        if not contains $p $fish_user_paths
-          set -g fish_user_paths $p $fish_user_paths
+        fish_add_path --move --prepend --path ${makeBinSearchPath profiles}
+        set fish_user_paths $fish_user_paths  
+        fish_vi_key_bindings
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+        for p in /run/current-system/sw/bin
+          if not contains $p $fish_user_paths
+            set -g fish_user_paths $p $fish_user_paths
+          end
         end
-      end
-    '';
+      '';
   };
   programs = {
     fzf.enable = true;
     fzf.enableZshIntegration = true;
     git = {
       enable = true;
-      ignores = [ "*~" "*.swp" ];
-      userEmail = "neil.darach@gmail.com";
-      userName = "Neil Darach";
+      ignores = [
+        "*~"
+        "*.swp"
+      ];
+      settings = {
+        user = {
+          email = "neil.darach@gmail.com";
+          name = "Neil Darach";
+        };
+      };
     };
     zsh.enable = true;
     zsh.enableCompletion = true;
@@ -388,9 +410,10 @@ in {
     starship.enable = true;
     starship.enableZshIntegration = true;
     starship.settings = {
-      format =
-        "$username$hostname$localip$shlvl$directory$git_branch$git_commit$git_state$git_metrics$git_status$hg_branch$pijul_channel$docker_context$package$bun$c$cmake$cobol$daml$dart$deno$dotnet$elixir$elm$erlang$fennel$gleam$golang$gradle$haskell$haxe$helm$java$julia$kotlin$lua$nim$nodejs$ocaml$odin$opa$perl$php$pulumi$purescript$python$quarto$raku$rlang$red$ruby$rust$scala$solidity$terraform$typst$vlang$vagrant$zig$buf$guix_shell$nix_shell$conda$meson$spack$memory_usage$aws$gcloud$openstack$azure$direnv$env_var$crystal$custom$sudo$cmd_duration$line_break$jobs$battery$time$status$container$os$shell$character";
-      status = { disabled = false; };
+      format = "$username$hostname$localip$shlvl$directory$git_branch$git_commit$git_state$git_metrics$git_status$hg_branch$pijul_channel$docker_context$package$bun$c$cmake$cobol$daml$dart$deno$dotnet$elixir$elm$erlang$fennel$gleam$golang$gradle$haskell$haxe$helm$java$julia$kotlin$lua$nim$nodejs$ocaml$odin$opa$perl$php$pulumi$purescript$python$quarto$raku$rlang$red$ruby$rust$scala$solidity$terraform$typst$vlang$vagrant$zig$buf$guix_shell$nix_shell$conda$meson$spack$memory_usage$aws$gcloud$openstack$azure$direnv$env_var$crystal$custom$sudo$cmd_duration$line_break$jobs$battery$time$status$container$os$shell$character";
+      status = {
+        disabled = false;
+      };
     };
     alacritty = {
       enable = true;
