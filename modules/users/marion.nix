@@ -7,7 +7,6 @@
   # user aspect
   den.aspects.marion = {
     includes = [
-      den.provides.define-user
       (den.provides.user-shell "fish")
     ];
 

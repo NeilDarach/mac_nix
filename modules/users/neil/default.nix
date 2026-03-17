@@ -8,7 +8,6 @@
   den.aspects.neil = {
     includes = [
       den.provides.primary-user
-      den.provides.define-user
       (den.provides.user-shell "fish")
     ];
     darwin = {

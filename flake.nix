@@ -19,12 +19,29 @@
     nixpkgs-lib.follows = "nixpkgs";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nixNvim.url = "git+https://codeberg.org/NeilDarach/nvimWrapper";
-    nixNvim.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    darwin = {
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixNvim = {
+      url = "git+https://codeberg.org/NeilDarach/nvimWrapper";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nur.url = "github:nix-community/NUR";
-    firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
-    firefox-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    firefox-darwin = {
+      url = "github:bandithedoge/nixpkgs-firefox-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    secrets = {
+      url = "git+https://codeberg.org/NeilDarach/secrets.git?shallow=1";
+      flake = false;
+    };
   };
 }

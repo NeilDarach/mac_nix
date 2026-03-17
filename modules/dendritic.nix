@@ -3,6 +3,6 @@
   imports = [
     (inputs.flake-file.flakeModules.dendritic or { })
     (inputs.den.flakeModules.dendritic or { })
-    (inputs.den.namespace "nd" true)
+    (inputs.den.namespace "local" true)
   ];
 }
