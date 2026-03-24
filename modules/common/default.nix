@@ -15,12 +15,6 @@
     os = {
       nixpkgs.config.allowUnfree = true;
       nixpkgs.config.allowUnfreePredicate = _: true;
-{
-  den.aspects.common = {
-    includes = [ den.aspects.openssh ];
-    os = {
-          nixpkgs.config.allowUnfree = true;
-          nixpkgs.config.allowUnfreePredicate = _: true;
     };
     nixos =
       {

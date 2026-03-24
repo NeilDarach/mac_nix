@@ -14,7 +14,7 @@ let
       fromAspect = _: den.aspects.${user.aspect};
     };
   hm-nixos =
-    { user }:
+    { user,... }:
     den._.forward {
       each = [ "homeManager-nixos" ];
       fromClass = _: "homeManager-nixos";
