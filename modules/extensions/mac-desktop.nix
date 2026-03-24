@@ -1,10 +1,9 @@
 {
-  den.aspects.wallpaper = {
-    homeManager =
+  den.aspects.mac-desktop = {
+    homeManager-darwin =
       {
         config,
         lib,
-        pkgs,
         ...
       }:
       with lib;

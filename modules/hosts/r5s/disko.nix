@@ -1,7 +1,7 @@
 { den,inputs, ... }:
 {
   den.aspects.r5s = {
-    includes = [ den.aspects.disko._._std-zfs ];
+    includes = [ den.aspects.disko._.std-zfs ];
     nixos = {
       imports = [ inputs.disko.nixosModules.disko ];
       config =

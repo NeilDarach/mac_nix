@@ -14,7 +14,6 @@
       { pkgs, ... }:
       {
         home.packages = [ pkgs.htop ];
-        local.extensions.enable = true;
         local.user.email = "marionnow@yahoo.co.uk";
         local.user.fullName = "Marion Darach";
       };

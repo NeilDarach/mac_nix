@@ -7,57 +7,12 @@
   # user aspect
   den.aspects.neil = {
     includes = [
-      den.provides.primary-user
+      den._.primary-user
+      (den._.user-shell "fish")
     ];
-    #++ ([
-    #den.aspects.wallpaper
-    #den.aspects.extensions
-    #den.aspects.neil._.mac
-    #]);
-    /*
-    homeManager-darwin =
-      { lib, pkgs, ... }:
-      {
-        desktop.wallpaper = ../../../files/wallpaper.plist;
-        extensions = [
-          {
-            uti = "public.mpeg-4";
-            bundle = "org.videolan.vlc";
-          }
-          {
-            uti = "com.apple.quicktime-movie";
-            bundle = "org.videolan.vlc";
-          }
-        ];
-        home.activation.appSymlinks = (
-          lib.hm.dag.entryAfter [ "writeBoundry" ] ''
-            run rm -rf ~/HomeApplications
-            run mkdir ~/HomeApplications
-            run ln -s /Applications/Steam.app ~/HomeApplications
-            run ln -s /Applications/OrcaSlicer.app ~/HomeApplications
-            run ln -s /Applications/1Password.app ~/HomeApplications
-            run ln -s /Applications/Dropbox.app ~/HomeApplications
-            run ln -s "${pkgs.mqtt-explorer}/Applications/MQTT Explorer.app" ~/HomeApplications
-            run ln -s "${pkgs.google-chrome}/Applications/Google Chrome.app" ~/HomeApplications
-            run ln -s "$(realpath "$HOME/Applications/Autodesk Fusion.app")" ~/HomeApplications
-            run ln -s "${pkgs.vlc-bin-universal}/Applications/VLC.app" ~/HomeApplications
-            run ln -s "${pkgs.inkscape}/Applications/Inkscape.app" ~/HomeApplications
-          ''
-        );
-      };
-
-    */
-    darwin = {
-      environment.etc = {
-        "sudoers.d/10-nix-commands".text = ''
-          neil ALL=(root) NOPASSWD:SETENV: /run/current-system/sw/bin/nix-env
-          neil ALL=(root) NOPASSWD:SETENV: /run/current-system/sw/bin/darwin-rebuild
-        '';
-      };
-    };
 
     homeManager =
-      { pkgs, lib, ... }:
+      { pkgs, ... }:
       {
         home.sessionVariables = {
           PAGER = "less";
@@ -67,6 +22,9 @@
         programs = {
           firefox.enable = true;
           tmux.enable = true;
+          direnv.enable = true;
+          git.enable = true;
+
         };
         home.shellAliases = {
           ls = "ls --color=auto -F";
@@ -95,11 +53,9 @@
 
     # user can provide NixOS configurations
     # to any host it is included on
-    nixos =
-      { pkgs, ... }:
-      {
-        users.users.neil.description = "Neil Darach";
-      };
+    os = {
+      users.users.neil.description = "Neil Darach";
+    };
 
   };
 }

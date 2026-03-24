@@ -6,6 +6,10 @@
   # host aspect
   den.aspects.NeilsMacBookPro = {
     # host NixOS configuration
+    includes = [
+      den.aspects.sops
+      den.aspects.common
+    ];
     darwin =
       { pkgs, ... }:
       {
