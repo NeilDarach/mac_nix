@@ -12,7 +12,7 @@
     };
   };
   den.hosts.aarch64-linux.r5s = {
-    users.marion = {
+    users.neil = {
       classes = [ "homeManager" ];
     };
   };

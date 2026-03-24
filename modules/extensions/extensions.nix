@@ -1,6 +1,6 @@
 {
   den.aspects.extensions = {
-    homeManager =
+    homeManager-darwin =
       {
         config,
         lib,

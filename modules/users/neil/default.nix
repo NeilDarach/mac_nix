@@ -8,13 +8,9 @@
   den.aspects.neil = {
     includes = [
       den.provides.primary-user
+      den.aspects.wallpaper
+      den.aspects.extensions
     ];
-    #++ ([
-    #den.aspects.wallpaper
-    #den.aspects.extensions
-    #den.aspects.neil._.mac
-    #]);
-    /*
     homeManager-darwin =
       { lib, pkgs, ... }:
       {
@@ -46,7 +42,6 @@
         );
       };
 
-    */
     darwin = {
       environment.etc = {
         "sudoers.d/10-nix-commands".text = ''
@@ -57,7 +52,7 @@
     };
 
     homeManager =
-      { pkgs, lib, ... }:
+      { pkgs, ... }:
       {
         home.sessionVariables = {
           PAGER = "less";
@@ -93,11 +88,9 @@
 
     # user can provide NixOS configurations
     # to any host it is included on
-    nixos =
-      { pkgs, ... }:
-      {
-        users.users.neil.description = "Neil Darach";
-      };
+    nixos = {
+      users.users.neil.description = "Neil Darach";
+    };
 
   };
 }

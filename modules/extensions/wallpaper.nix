@@ -1,6 +1,6 @@
 {
   den.aspects.wallpaper = {
-    homeManager =
+    homeManager-darwin =
       {
         config,
         lib,
