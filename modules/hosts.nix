@@ -12,6 +12,16 @@
     };
   };
   den.hosts.aarch64-linux.r5s = {
+    users.marion = {
+      classes = [ "homeManager" ];
+    };
+  };
+  den.hosts.x86_64-linux.gregor = {
+    users.neil = {
+      classes = [ "homeManager" ];
+    };
+  };
+  den.hosts.x86_64-linux.goip = {
     users.neil = {
       classes = [ "homeManager" ];
     };

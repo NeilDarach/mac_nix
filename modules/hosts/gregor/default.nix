@@ -4,12 +4,11 @@
 }:
 {
   # host aspect
-  den.aspects.r5s = {
+  den.aspects.gregor = {
     # host NixOS configuration
     includes = with den.aspects; [
-      hardware._.nanopi-r5s
-      hardware._.nanopi-r5s-networkr8125
       server
+      udev._.gregor
     ];
     nixos =
       { pkgs, ... }:

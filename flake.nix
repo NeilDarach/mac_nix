@@ -43,5 +43,18 @@
       url = "git+https://codeberg.org/NeilDarach/secrets.git?shallow=1";
       flake = false;
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    gff = {
+      url = "github:NeilDarach/gff";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.secrets.follows = "secrets";
+    };
+    msg_q = {
+      url = "github:NeilDarach/msg_q";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 }

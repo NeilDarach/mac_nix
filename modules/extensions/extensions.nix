@@ -1,21 +1,15 @@
 {
-  den.default.homeManager =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
-    {
-      options = with lib; {
-        local.extensions = {
-          enable = mkOption {
-            description = "Modify application associations";
-            default = pkgs.stdenv.isDarwin;
-            example = false;
-            type = types.bool;
-          };
-          entries = mkOption {
+  den.aspects.extensions = {
+    homeManager =
+      {
+        config,
+        lib,
+        pkgs,
+        ...
+      }:
+      {
+        options = with lib; {
+          extensions = mkOption {
             description = "App types to update";
             default = [ ];
             type =
@@ -32,23 +26,20 @@
               });
           };
         };
-      };
-      config =
-        let
-          cfg = config.local.extensions;
-        in
-        lib.mkIf cfg.enable (
+        config =
           let
             createEntries = lib.concatMapStrings (entry: ''
               ${pkgs.duti}/bin/duti -s ${entry.bundle} ${entry.uti} ${entry.role} > /dev/null
-            '') cfg.entries;
+            '') config.extensions;
           in
           {
-            home.activation.extensions = lib.hm.dag.entryAfter [ "writeBoundry" ] ''
-              echo >&2 "Setting up the extensions ..."
-              ${createEntries}
-            '';
-          }
-        );
-    };
+            home.activation.extensions = lib.mkIf (builtins.length config.extensions > 0) (
+              lib.hm.dag.entryAfter [ "writeBoundry" ] ''
+                echo >&2 "Setting up the extensions ..."
+                ${createEntries}
+              ''
+            );
+          };
+      };
+  };
 }

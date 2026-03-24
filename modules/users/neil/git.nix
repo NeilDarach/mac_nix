@@ -9,11 +9,12 @@
           ignores = [
             "*~"
             "*.swp"
+            ".direnv"
           ];
           settings = {
             user = {
-              email = config.local.user.email;
-              name = config.local.user.fullName;
+              email = "neil.darach@gmail.com";
+              name = "Neil Darach";
             };
           };
         };
