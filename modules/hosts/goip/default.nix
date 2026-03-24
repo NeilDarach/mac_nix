@@ -11,6 +11,7 @@
       server
       nginx-goip
       gff
+      fail2ban
     ];
     nixos =
       { pkgs, lib, ... }:

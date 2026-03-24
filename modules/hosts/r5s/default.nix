@@ -13,6 +13,7 @@
       r5s-firewall
       pi-hole
       etcd
+      fail2ban
     ];
     nixos =
       { lib, pkgs, ... }:

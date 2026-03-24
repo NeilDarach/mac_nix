@@ -19,6 +19,9 @@
       classes = [ "homeManager" ];
     };
   };
+  den.hosts.aarch64-linux.r5s-sd = {
+    users.nix.classes = [ "homeManager" ];
+  };
   den.hosts.x86_64-linux.gregor = {
     users.neil = {
       classes = [ "homeManager" ];

@@ -1,0 +1,281 @@
+{
+  den.aspects.haproxy = {
+    nixos =
+      {
+        config,
+        lib,
+        pkgs,
+        ...
+      }:
+      let
+        update-proxy = pkgs.buildNpmPackage {
+          pname = "update-proxy";
+          version = "0.1.0";
+          src = ./haproxy;
+          buildInputs = with pkgs; [ nodejs ];
+          npmDeps = pkgs.importNpmLock { npmRoot = ./haproxy; };
+          npmConfigHook = pkgs.importNpmLock.npmConfigHook;
+        };
+        darach-ca = pkgs.stdenv.mkDerivation {
+          name = "darach-ca";
+          src = ./haproxy;
+          phases = [ "installPhase" ];
+          installPhase = ''
+            mkdir -p $out
+            cp $src/* $out
+          '';
+        };
+        unauth = pkgs.writeText "unauth.html" ''
+          HTTP/1.0 403 Unauthorized
+          Cache-Control: no-cache
+          Connection: close
+          ContentType: text/html
+
+          <html><body><h1>Access Denied</h1>
+          <p>Access via HTTPS is only availble to clients with a certificate</p>
+          </body></html>
+        '';
+        index2_template = pkgs.writeText "ha-index.tmpl" ''
+          <html><body><h1>Static links</h1>
+          <ul><li><a href="//arde.darach.org.uk">OpenWrt Router</a></li>
+          </ul>
+          <h1>Dynamically registered services</h1><ul>
+          {% for service,details in services %}
+          <li><a href="//{{service}}.darach.org.uk">{{service}}</a> - {{details.description}} - <a href="http://{{details.host}}:{{details.port}}">{{details.host}}:{{details.port}}</a></li>
+          {% endfor %}
+          </ul></body></html>
+        '';
+        index_template = pkgs.writeText "ha-index.tmpl" ''
+          HTTP/1.0 200 Found
+          Cache-Control: no-cache
+          Connection: close
+          ContentType: text/html
+
+          <html><body><h1>Static links</h1>
+          <ul><li><a href="//arde.darach.org.uk">OpenWrt Router</a></li>
+          </ul>
+          <h1>Dynamically registered services</h1><ul>
+          {% for service,details in services %}
+          <li><a href="//{{service}}.darach.org.uk">{{service}}</a> - {{details.description}} - <a href="http://{{details.host}}:{{details.port}}">{{details.host}}:{{details.port}}</a></li>
+          {% endfor %}
+          </ul></body></html>
+        '';
+        cfg_stub = pkgs.writeText "ha-config-stub.cfg" ''
+          global
+        '';
+        proxy_lua = pkgs.writeText "proxy.lua" ''
+          core.register_service("proxy_http", "http", function(applet)
+              applet:set_status(200)
+              local idx = io.open("/var/lib/haproxy/index2.html", "r")
+              local response
+              if idx == nil then
+                  response = "File open error"
+              else
+                  response = idx:read("*all")
+              end
+              applet:add_header("content-length", string.len(response))
+              applet:add_header("cache-control", "no-cache")    
+              applet:start_response()
+              applet:send(response)
+          end)
+        '';
+
+        webhook_lua = pkgs.writeText "webhook.lua" ''
+          core.register_service("webhook_http", "http", function(applet)
+            local s = core.tcp()
+            s:connect("127.0.0.1",80)
+            s:settimeout(1)
+            core.Debug("qs is " .. applet.qs)
+            s:send("GET /api/webhook" .. applet.path .. "?" .. applet.qs .. " HTTP/1.1\r\n" .. 
+            "Host: home-assistant.darach.org.uk\r\n" ..
+            "Keep-alive: no\r\n" ..
+            "\r\n\r\n")
+            local msg = s:receive("*l")
+            local response = ""
+            if msg == nil then
+              response = "Error contacting home-assistant"
+              applet:set_status(503)
+            else
+              local code = tonumber(string.sub(msg,9,12))
+              applet:set_status(code)
+              response = s:receive("*l")
+              response = response .. "\r\n" .. s:receive("*a")
+              if code == 200 then
+                response = "<html><body><h1>Success</h1><p>HomeAssistant has accepted the request</p></body></html>"
+              end
+              s:close()
+            end
+            applet:add_header("content-length",string.len(response))
+            applet:start_response()
+            applet:send(response)
+          end)
+        '';
+
+        haproxy_config_template = pkgs.writeText "ha-config.tmpl" ''
+          global
+            daemon
+            maxconn 4096
+            ssl-default-bind-options ssl-min-ver TLSv1.2
+            tune.lua.bool-sample-conversion normal
+            lua-load ${webhook_lua}
+            lua-load ${proxy_lua}
+
+          defaults
+            mode tcp
+            timeout connect 5s
+            timeout client 1m
+            timeout server 1m
+            option redispatch
+            balance roundrobin
+
+          frontend stats
+            bind :1936
+            mode http
+            stats enable
+            stats hide-version
+            stats uri /
+
+          frontend default
+            mode http
+            bind *:80
+            bind *:443 ssl crt /var/lib/acme/darach.org.uk/full.pem ca-file ${darach-ca}/darach-ca.crt verify optional crl-file ${darach-ca}/darach_crl.pem
+            http-request set-header X-SSL-Client-DN %{+Q}[ssl_c_s_dn] if { ssl_c_used 1 } { ssl_c_verify 0 }
+            http-request set-header X-SSL-Client-CN %{+Q}[ssl_c_s_dn(cn)] if { ssl_c_used 1 } { ssl_c_verify 0 }
+            http-request set-header X-Forwarded-Proto https if { ssl_fc }
+            http-request set-header X-Forwarded-Proto https unless { ssl_fc }
+            http-request set-header X-Forwarded-Port %fp
+            http-request use-service lua.webhook_http if { hdr(host) -i webhook.darach.org.uk }
+            http-request use-service lua.proxy_http if { hdr(host) -i proxy.darach.org.uk }
+            acl ACL_Local hdr(host) -i gregor.darach.org.uk
+            use_backend be_Local if ACL_Local
+
+          {% for service,details in services %}
+          {% if not details.bind %}
+            acl ACL_{{service}} hdr(host) -i {{service}}.darach.org.uk
+          {% endif %}
+          {% endfor %}
+          {% for service,details in services %}
+          {% if not details.bind %}
+            use_backend be_{{service}} if ACL_{{service}}
+          {% endif %}
+          {% endfor %}
+            default_backend be_index
+
+          {% for service,details in services %}
+          {% if details.bind %}
+          frontend fe_{{service}}
+            bind *:{{details.bind}}
+            mode {% if details.mode %}{{details.mode}}{% else %}http{% endif %}
+            use_backend be_{{service}}
+          {% endif %}
+          {% endfor %}
+
+          backend  be_Local
+            mode http
+            server Gregor gregor.darach.org.uk:81 check
+
+          backend  be_index
+            mode http
+            http-request set-log-level silent
+            http-request redirect code 302 location http://proxy.darach.org.uk unless { hdr(host) -i proxy.darach.org.uk }
+            errorfile 503 /var/lib/haproxy/index.html
+
+          backend be_unauth
+            mode http
+            http-request set-log-level silent
+            errorfile 503 ${unauth}
+
+          {% for service,details in services %}
+          backend be_{{service}}
+            mode {% if details.mode %}{{details.mode}}{% else %}http{% endif %}
+            server {{service}} {{details.host}}:{{details.port}} check
+          {% endfor %}
+        '';
+
+      in
+      {
+        config = {
+          networking.firewall.allowedTCPPorts = [
+            80
+            1936
+            443
+          ];
+          users.users.haproxy.extraGroups = [ "acme" ];
+          services.haproxy.enable = true;
+          systemd.services.haproxy = {
+            preStart = ''
+              ${pkgs.coreutils}/bin/[ -f /var/lib/haproxy/haproxy.cfg ] || ${pkgs.coreutils}/bin/cp -v --no-preserve mode,ownership --force ${cfg_stub} /var/lib/haproxy/haproxy.cfg
+              ${pkgs.coreutils}/bin/chown ${config.services.haproxy.user}:${config.services.haproxy.group} /var/lib/haproxy/haproxy.cfg
+            '';
+            serviceConfig.ExecStartPre = lib.mkForce [
+              # when the master process receives USR2, it reloads itself using exec(argv[0]),
+              # so we create a symlink there and update it before reloading
+              "${pkgs.coreutils}/bin/ln -sf ${lib.getExe config.services.haproxy.package} /run/haproxy/haproxy"
+              # when running the config test, don't be quiet so we can see what goes wrong
+              "/run/haproxy/haproxy -c -f /etc/haproxy.cfg"
+            ];
+            serviceConfig.ExecReload = lib.mkForce [
+              "${lib.getExe config.services.haproxy.package} -c -f /etc/haproxy.cfg"
+              "${pkgs.coreutils}/bin/ln -sf ${lib.getExe config.services.haproxy.package} /run/haproxy/haproxy"
+              "${pkgs.coreutils}/bin/kill -USR2 $MAINPID"
+            ];
+            serviceConfig = {
+              RuntimeDirectory = "haproxy";
+              StateDirectory = "haproxy";
+            };
+          };
+          services.haproxy.config = "";
+          environment.etc."haproxy.cfg".source = lib.mkForce "/var/lib/haproxy/haproxy.cfg";
+
+          systemd.services.haproxy-watcher = {
+            description = "Restart the haproxy service when it's config file changes";
+            after = [ "network.target" ];
+            wantedBy = [
+              "multi-user.target"
+            ];
+            wants = [ "haproxy.service" ];
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = "${pkgs.systemd}/bin/systemctl reload haproxy";
+            };
+          };
+          systemd.paths.haproxy-watcher = {
+            wantedBy = [
+              "multi-user.target"
+            ];
+            pathConfig = {
+              PathChanged = "/var/lib/haproxy/haproxy.cfg";
+            };
+          };
+
+          systemd.services.update-proxy = {
+            description = "Update the haproxy configuration files";
+            after = [ "network.target" ];
+            path = [ pkgs.haproxy ];
+            wantedBy = [
+              "multi-user.target"
+            ];
+            wants = [
+              "haproxy.service"
+            ];
+
+            environment = {
+              ETCD_HOST = "etcd.darach.org.uk";
+              CFG_TEMPLATE = "${haproxy_config_template}";
+              INDEX_TEMPLATE = "${index_template}";
+              INDEX2_TEMPLATE = "${index2_template}";
+            };
+            serviceConfig = {
+              User = config.services.haproxy.user;
+              Group = config.services.haproxy.group;
+              Type = "simple";
+              ExecStart = "${update-proxy}/bin/update-proxy";
+              Restart = "always";
+              RuntimeDirectory = "haproxy";
+              StateDirectory = "haproxy";
+            };
+          };
+        };
+      };
+  };
+}

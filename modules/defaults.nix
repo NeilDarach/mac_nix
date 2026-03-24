@@ -14,7 +14,7 @@ let
       fromAspect = _: den.aspects.${user.aspect};
     };
   hm-nixos =
-    { user,... }:
+    { user, ... }:
     den._.forward {
       each = [ "homeManager-nixos" ];
       fromClass = _: "homeManager-nixos";
@@ -30,12 +30,13 @@ in
 {
   den.default.nixos = {
     system.stateVersion = "25.11";
-    registration.etcdHost = "etcd.darach.org.uk:2379";
+    #registration.etcdHost = "etcd.darach.org.uk:2379";
   };
   den.default.darwin.system.stateVersion = 6;
   den.default.homeManager.config = {
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;
+    xdg.enable = true;
   };
   den.default.includes = [
     den._.mutual-provider
@@ -46,13 +47,14 @@ in
     hm-nixos
   ];
   den.default.os =
-    { inputs', ... }:
+    { inputs', lib, ... }:
     {
       _module.args.pkgs-unstable = inputs'.nixpkgs-unstable.legacyPackages;
-      nix.extraOptions = ''
-        experimental-features = nix-command flakes
-      '';
-      home-manager = {
+      nix.settings.experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      home-manager = lib.mkIf false {
         backupFileExtension = "bak";
         useGlobalPkgs = true;
         useUserPackages = true;
