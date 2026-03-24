@@ -25,7 +25,7 @@
               options = "";
             }
             {
-              path = "/HomeApplications";
+              path = "~/HomeApplications";
               section = "others";
               options = "--sort name --view grid --display folder";
             }

@@ -1,6 +1,11 @@
-{ inputs, ... }:
+{ den,inputs, ... }:
 {
   den.aspects.common = {
+    includes = [ den.aspects.openssh ];
+    os = {
+          nixpkgs.config.allowUnfree = true;
+          nixpkgs.config.allowUnfreePredicate = _: true;
+    };
     nixos =
       {
         config,
@@ -20,8 +25,6 @@
             name = "nix/path/${name}";
             value.soure = value.flake;
           }) config.nix.registry);
-          nixpkgs.config.allowUnfree = true;
-          nixpkgs.config.allowUnfreePredicate = _: true;
           nix.registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
             (lib.filterAttrs (_: lib.isType "flake")) inputs
           );
@@ -47,14 +50,12 @@
             psmisc
             ripgrep
             sysstat
-            tmux
             tree
             unzip
             usbutils
             wget
             xxd
           ];
-          services.openssh.enable = true;
           time.timeZone = "Europe/London";
           security.sudo = {
             wheelNeedsPassword = false;

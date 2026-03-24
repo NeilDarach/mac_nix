@@ -15,6 +15,9 @@
     users.neil = {
       classes = [ "homeManager" ];
     };
+    users.root = {
+      classes = [ "homeManager" ];
+    };
   };
   den.hosts.x86_64-linux.gregor = {
     users.neil = {
