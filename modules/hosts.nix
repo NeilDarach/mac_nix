@@ -20,10 +20,17 @@
     users.neil = {
       classes = [ "homeManager" ];
     };
+    users.root = {
+      classes = [ "homeManager" ];
+    };
   };
   den.hosts.x86_64-linux.goip = {
     users.neil = {
       classes = [ "homeManager" ];
     };
+    users.root = {
+      classes = [ "homeManager" ];
+    };
+    users.backup = { };
   };
 }

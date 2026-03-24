@@ -1,6 +1,21 @@
-{ inputs, ... }:
+{ den,inputs, ... }:
 {
   den.aspects.common = {
+    includes = with den.aspects; [
+      openssh
+      registration
+      strongStateDir
+      transcode
+      zfs-backup
+      plex
+      msg_q
+      disableGnome
+      wrappedNvim
+    ];
+    os = {
+      nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.allowUnfreePredicate = _: true;
+    };
     nixos =
       {
         config,

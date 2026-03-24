@@ -11,6 +11,7 @@
       impermanence
       sops
       distributedBuilds
+      zfs
     ];
   };
 }

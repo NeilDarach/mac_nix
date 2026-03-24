@@ -86,6 +86,8 @@
           plistwatch
           ripgrep
           vlc-bin-universal
+          wrappedNvim
+          wrappedNvimLocal
         ];
         local.user.email = "neil.darach@gmail.com";
         local.user.fullName = "Neil Darach";

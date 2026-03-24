@@ -1,6 +1,21 @@
 { inputs, ... }:
 {
   den.aspects.sops = {
+    os = {
+      sops = {
+        age.generateKey = false;
+        defaultSopsFormat = "yaml";
+        defaultSopsFile = "${toString inputs.secrets}/secrets.yaml";
+      };
+    };
+
+    darwin = {
+      imports = [ inputs.sops-nix.darwinModules.sops ];
+      sops = {
+        age.keyFile = "/Users/neil/.config/sops/age/keys.txt";
+      };
+    };
+
     nixos =
       {
         config,
@@ -11,9 +26,6 @@
         config = {
           sops = {
             age.keyFile = "/keys/key.txt";
-            age.generateKey = false;
-            defaultSopsFormat = "yaml";
-            defaultSopsFile = "${toString inputs.secrets}/secrets.yaml";
           };
           systemd.tmpfiles.rules = [
             "f ${config.sops.age.keyFile} 0640 root root"

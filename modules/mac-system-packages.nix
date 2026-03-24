@@ -16,8 +16,6 @@ includes = [ den._.inputs' ];
           home-manager
           mqtt-explorer
           sshfs
-          inputs'.nixNvim.packages.neovim
-          inputs'.nixNvim.packages.localneovim
         ];
       };
   };

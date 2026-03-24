@@ -9,6 +9,9 @@
     includes = with den.aspects; [
       server
       udev._.gregor
+      nginx-gregor
+      plex
+      mqtt
     ];
     nixos =
       { pkgs, ... }:
