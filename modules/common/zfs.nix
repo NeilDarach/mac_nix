@@ -1,8 +1,7 @@
-{ den, ... }:
 {
   den.aspects.zfs = {
     nixos =
-      { pkgs,... }:
+      { pkgs, ... }:
       {
         boot.supportedFilesystems = [ "zfs" ];
         boot.initrd.kernelModules = [ "zfs" ];

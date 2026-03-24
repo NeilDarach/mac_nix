@@ -1,8 +1,4 @@
 {
-  den,
-  ...
-}:
-{
   # user aspect
   den.aspects.backup = {
     nixos =

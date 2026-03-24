@@ -56,6 +56,7 @@
           };
         config =
           let
+            cfg = config.strongStateDir;
             enabled = lib.attrsets.filterAttrs (k: v: v.enable) cfg.service;
             anyEnabled = 0 != lib.length (lib.attrValues enabled);
             zfsBackup = src: dest: {
@@ -66,7 +67,6 @@
                 Unit = "zfs-backup@${src}:${dest}.service";
               };
             };
-            cfg = config.strongStateDir;
           in
           lib.mkIf anyEnabled {
             programs.ssh = {
@@ -89,7 +89,7 @@
               value = zfsBackup "${v.dataDir}" "${v.dataDir}";
             }) enabled;
 
-            systemd.mounts = builtins.map (v: {
+            systemd.mounts = map (v: {
               requires = [
                 "strongStateDir@${v.datasetName}:${v.localUser}:${v.localGroup}:${v.datasetName}.service"
               ];

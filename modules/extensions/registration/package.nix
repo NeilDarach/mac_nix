@@ -1,4 +1,4 @@
-{ inputs,... }:
+{ inputs, ... }:
 {
   den.aspects.strongStateDir = {
     nixos =

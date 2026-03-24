@@ -1,13 +1,15 @@
-{inputs,...}:
+{ inputs, ... }:
 {
   den.aspects.strongStateDir = {
-    nixos = {pkgs,...}:{
-      nixpkgs.overlays = [
-        (final: previous: {
-          inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system}) strongStateDir;
-        })
-      ];
-    };
+    nixos =
+      { pkgs, ... }:
+      {
+        nixpkgs.overlays = [
+          (final: previous: {
+            inherit (inputs.self.packages.${pkgs.stdenv.hostPlatform.system}) strongStateDir;
+          })
+        ];
+      };
   };
   perSystem =
     { pkgs, ... }:
@@ -27,6 +29,7 @@
         ]
         ++ (with pkgs; [
           gzip
+          gnugrep
           gnugrep
           util-linux
           openssh
