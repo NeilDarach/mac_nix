@@ -1,5 +1,5 @@
 {
-  den.aspects.dock = {
+  den.aspects.mac-dock = {
     homeManager-darwin =
       {
         config,

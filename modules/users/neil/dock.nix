@@ -1,7 +1,6 @@
 { den, ... }:
 {
   den.aspects.neil = {
-    includes = [ den.aspects.dock ];
     homeManager-darwin =
       { pkgs, ... }:
       {

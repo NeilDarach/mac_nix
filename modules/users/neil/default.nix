@@ -8,8 +8,7 @@
   den.aspects.neil = {
     includes = [
       den.provides.primary-user
-      den.aspects.wallpaper
-      den.aspects.extensions
+      den.aspects.mac
     ];
     homeManager-darwin =
       { lib, pkgs, ... }:
