@@ -9,6 +9,8 @@
     includes = [
       den._.primary-user
       (den._.user-shell "fish")
+      den.aspects.hm-darwin
+      den.aspects.hm-nixos
     ];
 
     homeManager =
@@ -55,6 +57,11 @@
     # to any host it is included on
     os = {
       users.users.neil.description = "Neil Darach";
+      home-manager = {
+        backupFileExtension = "bak";
+        useGlobalPkgs = true;
+        useUserPackages = true;
+      };
     };
 
   };

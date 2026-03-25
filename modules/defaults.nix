@@ -1,6 +1,6 @@
 { den, ... }:
-let
-  hm-darwin =
+{
+  den.aspects.hm-darwin =
     { user, ... }:
     den._.forward {
       each = [ "homeManager-darwin" ];
@@ -13,7 +13,7 @@ let
       ];
       fromAspect = _: den.aspects.${user.aspect};
     };
-  hm-nixos =
+  den.aspects.hm-nixos =
     { user, ... }:
     den._.forward {
       each = [ "homeManager-nixos" ];
@@ -26,11 +26,8 @@ let
       ];
       fromAspect = _: den.aspects.${user.aspect};
     };
-in
-{
   den.default.nixos = {
     system.stateVersion = "25.11";
-    #registration.etcdHost = "etcd.darach.org.uk:2379";
   };
   den.default.darwin.system.stateVersion = 6;
   den.default.homeManager.config = {
@@ -43,21 +40,18 @@ in
     den._.hostname
     den._.define-user
     den._.inputs'
-    hm-darwin
-    hm-nixos
+    den._.self'
   ];
   den.default.os =
-    { inputs', lib, ... }:
+    {
+      inputs',
+      ...
+    }:
     {
       _module.args.pkgs-unstable = inputs'.nixpkgs-unstable.legacyPackages;
       nix.settings.experimental-features = [
         "nix-command"
         "flakes"
       ];
-      home-manager = lib.mkIf false {
-        backupFileExtension = "bak";
-        useGlobalPkgs = true;
-        useUserPackages = true;
-      };
     };
 }
