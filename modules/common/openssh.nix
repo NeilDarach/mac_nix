@@ -17,7 +17,7 @@
             PasswordAuthentication = false;
             StreamLocalBindUnlink = "yes";
             GatewayPorts = "clientspecified";
-            AllowedUsers = [ "neil" ];
+            AllowUsers = [ "neil" ];
           };
         };
         sops = {

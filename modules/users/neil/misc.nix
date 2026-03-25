@@ -1,6 +1,25 @@
 { den, ... }:
 {
   den.aspects.neil = {
+    homeManager-darwin = {pkgs,...}:{
+      programs = {
+        firefox = {
+          enable = true;
+          profiles.neil = {
+            extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+              ublock-origin
+              onepassword-password-manager
+            ];
+            settings = {
+              "browser.startup.homepage" = "https://theoldreader.com/posts/all";
+              "browser.shell.checkDefaultBrowser" = false;
+              "browser.shell.defaultBrowserCheckCount" = 1;
+              "browser.shell.skipDefaultBrowserCheck" = true;
+            };
+          };
+        };
+      };
+    };
     homeManager =
       {
         pkgs,
@@ -61,21 +80,6 @@
             enable = true;
             settings.font.normal.family = "SauceCodePro Nerd Font Mono";
             settings.font.size = 14;
-          };
-          firefox = {
-            enable = true;
-            profiles.neil = {
-              extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
-                ublock-origin
-                onepassword-password-manager
-              ];
-              settings = {
-                "browser.startup.homepage" = "https://theoldreader.com/posts/all";
-                "browser.shell.checkDefaultBrowser" = false;
-                "browser.shell.defaultBrowserCheckCount" = 1;
-                "browser.shell.skipDefaultBrowserCheck" = true;
-              };
-            };
           };
         };
       };

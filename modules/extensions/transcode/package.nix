@@ -39,7 +39,7 @@
           findutils
         ]);
         buildInputs = [ pkgs.makeWrapper ];
-        postBuild = "wrapProgram $out/bin/transcode --set $out/bin --set TVNAMERCFG ${tvnamer_cfg}";
+        postBuild = "wrapProgram $out/bin/transcode --set PATH $out/bin --set TVNAMERCFG ${tvnamer_cfg}";
 
       };
     in

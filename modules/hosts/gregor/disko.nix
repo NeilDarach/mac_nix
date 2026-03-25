@@ -1,7 +1,7 @@
 { den, inputs, ... }:
 {
   den.aspects.gregor = {
-    includes = [ den.aspects.disko._.std-zfs ];
+        includes = [ den.aspects.disko._.std-zfs ];
     nixos = {
       imports = [ inputs.disko.nixosModules.disko ];
       config =
@@ -27,7 +27,7 @@
                         mountOptions = [ "umask=0077" ];
                       };
                     };
-                    zfs = {
+                                    zfs = {
                       size = "100%";
                       content = {
                         type = "zfs";

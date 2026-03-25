@@ -1,7 +1,7 @@
 { den, ... }:
 {
   den.aspects.neil = {
-    homeManager =
+    homeManager-darwin =
       {
         pkgs,
         lib,

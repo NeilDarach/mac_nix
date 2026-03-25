@@ -7,12 +7,24 @@
   # user aspect
   den.aspects.neil = {
     includes = [
+      den._.define-user
       den._.primary-user
       (den._.user-shell "fish")
       den.aspects.hm-darwin
       den.aspects.hm-nixos
     ];
 
+    homeManager-darwin =
+      { pkgs, ... }:
+      {
+        home.packages = [
+          pkgs.plistwatch
+          pkgs.vlc-bin-universal
+        ];
+        programs = {
+          firefox.enable = true;
+        };
+      };
     homeManager =
       { pkgs, ... }:
       {
@@ -22,7 +34,6 @@
           EDITOR = "vim";
         };
         programs = {
-          firefox.enable = true;
           tmux.enable = true;
           direnv.enable = true;
           git.enable = true;
@@ -43,9 +54,7 @@
           htop
           jq
           less
-          plistwatch
           ripgrep
-          vlc-bin-universal
           wrappedNvim
           wrappedNvimLocal
         ];

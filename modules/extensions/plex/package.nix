@@ -3,11 +3,11 @@
     nixos =
       { pkgs, ... }:
       let
-        version = "1.42.2.10156-f737b826c";
+        version = "1.43.0.10492-121068a07";
         sha256 =
           {
-            x86_64-linux = "sha256-1ieh7qc1UBTorqQTKUQgKzM96EtaKZZ8HYq9ILf+X3M=";
-            aarch64-linux = "sha256-Vm38oO+zhFyHBy6fDuMphDlaqM43BIdLniQ7VJDMAQU=";
+            x86_64-linux = "sha256-HA779rkjy8QBlW2+IsRmgu4t5PT2Gy0oaqcJm+9zCYE=";
+            aarch64-linux = "sha256-YrIH51MyyL6gPWneAaV4sMUDygau5ytZnOBgQ1YCcLo=";
           }
           ."${pkgs.stdenv.hostPlatform.system}";
         arch =
@@ -24,7 +24,7 @@
               plexRaw = previous.plexRaw.overrideAttrs (o: {
                 src = final.fetchurl {
                   inherit version sha256;
-                  url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver-${version}-${arch}.deb";
+                  url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_${arch}.deb";
                 };
               });
 

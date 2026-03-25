@@ -44,7 +44,7 @@
             };
             etcdHost = lib.mkOption {
               type = lib.types.str;
-              default = "localhost:2379";
+              default = "etcd.darach.org.uk:2379";
             };
             service = lib.mkOption {
               type = lib.types.attrsOf registrationType;

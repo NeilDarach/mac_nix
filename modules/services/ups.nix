@@ -1,5 +1,5 @@
 {
-  den.aspects.ups-server = {
+  den.aspects.ups = {
     nixos =
       {
         config,

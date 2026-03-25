@@ -1,5 +1,6 @@
 {
   den,
+  inputs,
   ...
 }:
 {
@@ -10,49 +11,49 @@
       server
       udev._.gregor
       hardware._.intel
-      nginx-gregor
-      plex
-      mqtt
-      transmsision
-      zigbee2mqtt
+      acme-darach
+      appdaemon
+      esphome
       gitea
       grafana
-      appdaemon
-      home-assistant
-      influxdb2
-      nginx-gregor
-      ups
       haproxy
-      acme-darach
-      esphome
+      home-assistant
+      influxdb
+      mqtt
+      nginx-gregor
+      plex
+      transmission
+      ups
+      zigbee2mqtt
     ];
     nixos =
       { pkgs, ... }:
       {
+        #imports = [ inputs.msg_q.nixosModules.msg_q ];
         environment.shells = with pkgs; [
           fish
           bash
         ];
-        environment.systemPackages = [ "bluez" ];
+        environment.systemPackages = [ pkgs.bluez ];
         hardware.bluetooth.enable = true;
-        services.msg_q = {
-          enable = true;
-          port = 9000;
-          openFirewall = true;
-        };
+        #services.msg_q = {
+        #enable = true;
+        #port = 9000;
+        #openFirewall = true;
+        #};
         services.dbus = {
           implementation = "broker";
           enable = true;
         };
         hardware.firmware = [ pkgs.linux-firmware ];
 
+        nix.settings.extra-platforms = [ "aarch64-linux" ];
         boot = {
           loader = {
             systemd-boot.enable = true;
             efi.canTouchEfiVariables = true;
             efi.efiSysMountPoint = "/boot";
           };
-          nix.settings.extra-platforms = [ "aarch64-linux" ];
           initrd.systemd.emergencyAccess = true;
           binfmt.emulatedSystems = [ "aarch64-linux" ];
           zfs.extraPools = [
@@ -70,6 +71,7 @@
             /var/lib/nfs/yellow 192.168.4.89(rw,sync,no_subtree_check,no_root_squash)
           '';
         };
+        networking.hostId = "abcdef01";
       };
   };
 }

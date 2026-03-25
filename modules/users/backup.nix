@@ -14,7 +14,7 @@
           ];
         };
         users.groups.backup = { };
-        services.openssh.settings.AllowedUsers = [ "backup" ];
+        services.openssh.settings.AllowUsers = [ "backup" ];
         security.sudo = {
           enable = true;
           extraRules = [

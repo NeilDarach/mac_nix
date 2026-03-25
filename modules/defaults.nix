@@ -38,7 +38,6 @@
   den.default.includes = [
     den._.mutual-provider
     den._.hostname
-    den._.define-user
     den._.inputs'
     den._.self'
   ];

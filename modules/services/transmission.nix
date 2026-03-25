@@ -1,5 +1,7 @@
+{ den, ... }:
 {
   den.aspects.transmission = {
+    includes = [ den.aspects.transcode ];
     nixos =
       { pkgs, config, ... }:
       {

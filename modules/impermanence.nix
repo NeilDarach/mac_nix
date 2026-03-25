@@ -23,7 +23,7 @@
             before = [ "sysroot.mount" ];
             path = [ pkgs.zfs ];
             unitConfig.DefaultDependencies = "no";
-            serviceConfigType = "oneshot";
+            serviceConfig.Type = "oneshot";
             script = ''
               echo "    >> >> attempting rollback << <<"
               zfs rollback -r zroot/weak/root@blank && echo "    >> >> rollback complete << <<"
